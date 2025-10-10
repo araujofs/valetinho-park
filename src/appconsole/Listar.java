@@ -1,14 +1,14 @@
-package appconsole;
+package src.appconsole;
 /**
  * SI - POO - Prof. Fausto Ayres
  * Teste da Fachada
  * 
  */
 
-import modelo.Cliente;
-import modelo.Conta;
-import modelo.Lancamento;
-import repositorio.Repositorio;
+import src.modelo.Cliente;
+import src.modelo.Conta;
+import src.modelo.Lancamento;
+import src.repositorio.Repositorio;
 
 public class Listar {
 

@@ -1,13 +1,19 @@
-package modelo;
+package src.modelo;
 
 import java.util.ArrayList;
 
-class Estacionamento {
+public class Estacionamento {
   static Integer autoId = 1;
   private Integer id;
   private ArrayList<Bilhete> listaBilhete = new ArrayList<>();
   private Localizacao localizacao;
 
+  public Estacionamento(Localizacao localizacao) {
+    this.localizacao = localizacao;
+    this.id = autoId;
+    autoId++;
+  }
+  
   public Integer getId() {
     return id;
   }
@@ -30,11 +36,5 @@ class Estacionamento {
 
   public void setLocalizacao(Localizacao localizacao) {
     this.localizacao = localizacao;
-  }
-
-  Estacionamento(Localizacao localizacao) {
-    this.localizacao = localizacao;
-    this.id = autoId;
-    autoId++;
   }
 }

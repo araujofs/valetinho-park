@@ -1,15 +1,15 @@
-package modelo;
+package src.modelo;
 
 import java.util.Date;
 
-class Bilhete {
+public class Bilhete {
   static Integer autoId = 1;
   private Estacionamento estacionamento;
   private Date data;
   private Double valorpago;
   private Integer id;
   
-  Bilhete(Estacionamento estacionamento, Date data, Double valorpago) {
+  public Bilhete(Estacionamento estacionamento, Date data, Double valorpago) {
     this.data = data;
     this.estacionamento = estacionamento;
     this.valorpago = valorpago;

@@ -1,8 +1,8 @@
-package appconsole;
+package src.appconsole;
 
-import modelo.Cliente;
-import modelo.Conta;
-import repositorio.Repositorio;
+import src.modelo.Cliente;
+import src.modelo.Conta;
+import src.repositorio.Repositorio;
 
 public class Apagar {
 
@@ -11,10 +11,10 @@ public class Apagar {
 			String chave = "chave3";
 			Conta conta = Repositorio.lerConta(chave);
 			if (conta == null) 
-				throw new Exception(chave+" não encontrada");
+				throw new Exception(chave+" nï¿½o encontrada");
 			
 			if(conta.getSaldo() != 0) 
-				throw new Exception("Conta com saldo não pode ser apagada ");
+				throw new Exception("Conta com saldo nï¿½o pode ser apagada ");
 			
 			Cliente cliente = conta.getCliente();
 			conta.setCliente(null);

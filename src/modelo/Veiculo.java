@@ -1,4 +1,4 @@
-package modelo;
+package src.modelo;
 
 import java.util.ArrayList;
 
@@ -6,7 +6,7 @@ public class Veiculo {
   private String placa;
   private ArrayList<Bilhete> listaBilhete = new ArrayList<>();
   
-  Veiculo(String placa) {
+  public Veiculo(String placa) {
     this.placa = placa;
   }
 
