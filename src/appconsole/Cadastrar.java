@@ -113,7 +113,7 @@ public class Cadastrar {
       Repositorio.gravar(b11);
       Repositorio.gravar(b12);
 
-      System.out.println("Cadastrou dados de estacionamento e bilhetes.");
+      System.out.println("Cadastrou dados de estacionamentos, veículos e bilhetes.");
     } catch (Exception e) {
       System.out.println("--->" + e.getMessage());
       e.printStackTrace();
