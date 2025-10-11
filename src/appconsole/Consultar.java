@@ -1,4 +1,4 @@
-package src.appconsole;
+package appconsole;
 
 public class Consultar {
   

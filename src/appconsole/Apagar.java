@@ -1,8 +1,9 @@
-package src.appconsole;
+package appconsole;
 
-import src.modelo.Cliente;
-import src.modelo.Conta;
-import src.repositorio.Repositorio;
+
+import modelo.Bilhete;
+import modelo.Estacionamento;
+import repositorio.Repositorio;
 
 public class Apagar {
 

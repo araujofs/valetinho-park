@@ -1,40 +1,40 @@
-package src.appconsole;
-/**
- * SI - POO - Prof. Fausto Ayres
- * Teste da Fachada
- * 
- */
+package appconsole;
 
-import src.modelo.Cliente;
-import src.modelo.Conta;
-import src.modelo.Lancamento;
-import src.repositorio.Repositorio;
+import modelo.Bilhete;
+import modelo.Estacionamento;
+import modelo.Veiculo;
+import repositorio.Repositorio;
 
 public class Listar {
 
-	public Listar() {
-		try {
-			System.out.println("\n---------listagem de contas-----");
-			for(Conta c : Repositorio.getAll(Conta.class)) { 
-				System.out.println(c);
-				for(Lancamento lan : c.getLancamentos()) 
-					System.out.println("   "+lan);
-			}
+  public Listar() {
+    try {
+      System.out.println("\n---------listagem de estacionamentos-----");
+      for (Estacionamento e : Repositorio.lerTodos(Estacionamento.class)) {
+        System.out.println(e);
+        for (Bilhete b : e.getListaBilhete()) {
+          System.out.println("   " + b);
+        }
+      }
 
-			System.out.println("\n---------listagem de clientes ----");
-			for(Cliente e : Repositorio.getAll(Cliente.class)) 
-				System.out.println(e);
-			
-			
-		} catch (Exception e) {
-			System.out.println("--->"+e.getMessage());
-		}	
-	}
+      System.out.println("\n---------listagem de veiculos-----");
+      for (Veiculo v : Repositorio.lerTodos(Veiculo.class)) {
+        System.out.println(v);
+        for (Bilhete b : v.getListaBilhete()) {
+          System.out.println("   " + b);
+        }
+      }
 
-	public static void main (String[] args) 
-	{
-		new Listar();
-	}
+      System.out.println("\n---------listagem de bilhetes-----");
+      for (Bilhete b : Repositorio.lerTodos(Bilhete.class)) {
+        System.out.println(b);
+      }
+    } catch (Exception e) {
+      System.out.println("--->" + e);
+    }
+  }
+
+  public static void main(String[] args) {
+    new Listar();
+  }
 }
-
-

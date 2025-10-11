@@ -1,4 +1,4 @@
-package src.modelo;
+package modelo;
 
 import java.util.ArrayList;
 
@@ -10,19 +10,20 @@ public class Veiculo {
     this.placa = placa;
   }
 
-  public String getPlaca() {
-    return placa;
+  public void addBilhete(Bilhete bilhete) {
+    this.listaBilhete.add(bilhete);
   }
 
-  public void setPlaca(String placa) {
-    this.placa = placa;
+  public String getPlaca() {
+    return placa;
   }
 
   public ArrayList<Bilhete> getListaBilhete() {
     return listaBilhete;
   }
 
-  public void setListaBilhete(ArrayList<Bilhete> listaBilhete) {
-    this.listaBilhete = listaBilhete;
-  }  
+  @Override
+  public String toString() {
+    return "[placa=" + placa + "]";
+  }
 }

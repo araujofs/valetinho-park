@@ -1,8 +1,8 @@
-package src.modelo;
+package modelo;
 
 import java.util.ArrayList;
 
-public class Estacionamento {
+public class Estacionamento implements Identificavel {
   static Integer autoId = 1;
   private Integer id;
   private ArrayList<Bilhete> listaBilhete = new ArrayList<>();
@@ -13,28 +13,27 @@ public class Estacionamento {
     this.id = autoId;
     autoId++;
   }
-  
-  public Integer getId() {
-    return id;
+
+  public void addBilhete(Bilhete bilhete) throws Exception {
+    if (!bilhete.getEstacionamento().equals(this))
+      throw new Exception("Bilhete não pertence a esse estacionamento");
+    this.listaBilhete.add(bilhete);
   }
 
-  public void setId(Integer id) {
-    this.id = id;
+  public Integer getId() {
+    return id;
   }
 
   public ArrayList<Bilhete> getListaBilhete() {
     return listaBilhete;
   }
 
-  public void setListaBilhete(ArrayList<Bilhete> listaBilhete) {
-    this.listaBilhete = listaBilhete;
-  }
-
   public Localizacao getLocalizacao() {
     return localizacao;
   }
 
-  public void setLocalizacao(Localizacao localizacao) {
-    this.localizacao = localizacao;
+  @Override
+  public String toString() {
+    return "[id=" + id + ", localizacao=" + localizacao + "]";
   }
 }

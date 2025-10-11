@@ -1,12 +1,12 @@
-package src.appconsole;
-
-import src.modelo.Bilhete;
-import src.modelo.Estacionamento;
-import src.modelo.Localizacao;
-import src.modelo.Veiculo;
-import src.repositorio.Repositorio;
+package appconsole;
 
 import java.util.Date;
+
+import modelo.Bilhete;
+import modelo.Estacionamento;
+import modelo.Localizacao;
+import modelo.Veiculo;
+import repositorio.Repositorio;
 
 public class Cadastrar {
 
@@ -37,46 +37,46 @@ public class Cadastrar {
       Veiculo v6 = new Veiculo("PQR-1122");
 
       // Bilhetes (associados a estacionamento e veículo)
-      Date now = new Date();
-      Bilhete b1 = new Bilhete(e1, now, 10.0);
-      Bilhete b2 = new Bilhete(e1, new Date(now.getTime() - 60_000L), 12.5);
-      Bilhete b3 = new Bilhete(e2, now, 8.0);
-      Bilhete b4 = new Bilhete(e3, new Date(now.getTime() - 120_000L), 20.0);
-      Bilhete b5 = new Bilhete(e2, new Date(now.getTime() - 30_000L), 5.0);
-      Bilhete b6 = new Bilhete(e4, new Date(now.getTime() - 5_000L), 7.5);
-      Bilhete b7 = new Bilhete(e5, new Date(now.getTime() - 200_000L), 15.0);
-      Bilhete b8 = new Bilhete(e6, new Date(now.getTime() - 300_000L), 3.0);
-      Bilhete b9 = new Bilhete(e4, new Date(now.getTime() - 15_000L), 6.0);
-      Bilhete b10 = new Bilhete(e5, new Date(now.getTime() - 45_000L), 9.0);
-      Bilhete b11 = new Bilhete(e6, new Date(now.getTime() - 90_000L), 11.0);
-      Bilhete b12 = new Bilhete(e3, new Date(now.getTime() - 250_000L), 18.0);
+      Date nowDate = new Date();
+      Bilhete b1 = new Bilhete(e1, nowDate, 10.0);
+      Bilhete b2 = new Bilhete(e1, new java.util.Date(nowDate.getTime() - 1L * 24 * 60 * 60 * 1000), 12.5); // 1 dia atrás
+      Bilhete b3 = new Bilhete(e2, nowDate, 8.0);
+      Bilhete b4 = new Bilhete(e3, new java.util.Date(nowDate.getTime() - 2L * 24 * 60 * 60 * 1000), 20.0); // 2 dias atrás
+      Bilhete b5 = new Bilhete(e2, new java.util.Date(nowDate.getTime() - 1L * 24 * 60 * 60 * 1000), 5.0); // 1 dia atrás
+      Bilhete b6 = new Bilhete(e4, new java.util.Date(nowDate.getTime() - 1L * 24 * 60 * 60 * 1000), 7.5); // 1 dia atrás
+      Bilhete b7 = new Bilhete(e5, new java.util.Date(nowDate.getTime() - 3L * 24 * 60 * 60 * 1000), 15.0); // 3 dias atrás
+      Bilhete b8 = new Bilhete(e6, new java.util.Date(nowDate.getTime() - 4L * 24 * 60 * 60 * 1000), 3.0); // 4 dias atrás
+      Bilhete b9 = new Bilhete(e4, new java.util.Date(nowDate.getTime() - 1L * 24 * 60 * 60 * 1000), 6.0); // 1 dia atrás
+      Bilhete b10 = new Bilhete(e5, new java.util.Date(nowDate.getTime() - 1L * 24 * 60 * 60 * 1000), 9.0); // 1 dia atrás
+      Bilhete b11 = new Bilhete(e6, new java.util.Date(nowDate.getTime() - 2L * 24 * 60 * 60 * 1000), 11.0); // 2 dias atrás
+      Bilhete b12 = new Bilhete(e3, new java.util.Date(nowDate.getTime() - 3L * 24 * 60 * 60 * 1000), 18.0); // 3 dias atrás
 
       // ligar bilhetes às listas internas
-      e1.getListaBilhete().add(b1);
-      e1.getListaBilhete().add(b2);
-      e2.getListaBilhete().add(b3);
-      e2.getListaBilhete().add(b5);
-      e3.getListaBilhete().add(b4);
-      e4.getListaBilhete().add(b6);
-      e4.getListaBilhete().add(b9);
-      e5.getListaBilhete().add(b7);
-      e5.getListaBilhete().add(b10);
-      e6.getListaBilhete().add(b8);
-      e6.getListaBilhete().add(b11);
-      e3.getListaBilhete().add(b12);
+      e1.addBilhete(b1);
+      e1.addBilhete(b2);
+      e2.addBilhete(b3);
+      e2.addBilhete(b5);
+      e3.addBilhete(b4);
+      e4.addBilhete(b6);
+      e4.addBilhete(b9);
+      e5.addBilhete(b7);
+      e5.addBilhete(b10);
+      e6.addBilhete(b8);
+      e6.addBilhete(b11);
+      e3.addBilhete(b12);
 
-      v1.getListaBilhete().add(b1);
-      v2.getListaBilhete().add(b2);
-      v2.getListaBilhete().add(b3);
-      v3.getListaBilhete().add(b4);
-      v1.getListaBilhete().add(b5);
-      v4.getListaBilhete().add(b6);
-      v5.getListaBilhete().add(b7);
-      v6.getListaBilhete().add(b8);
-      v4.getListaBilhete().add(b9);
-      v5.getListaBilhete().add(b10);
-      v6.getListaBilhete().add(b11);
-      v3.getListaBilhete().add(b12);
+      v1.addBilhete(b1);
+      v2.addBilhete(b2);
+      v2.addBilhete(b3);
+      v3.addBilhete(b4);
+      v1.addBilhete(b5);
+      v4.addBilhete(b6);
+      v5.addBilhete(b7);
+      v6.addBilhete(b8);
+      v4.addBilhete(b9);
+      v5.addBilhete(b10);
+      v6.addBilhete(b11);
+      v3.addBilhete(b12);
 
       // Persistir no repositório
       Repositorio.gravar(l1);
