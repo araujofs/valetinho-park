@@ -1,34 +1,44 @@
 package appconsole;
 
-
 import modelo.Bilhete;
 import modelo.Estacionamento;
+import modelo.Veiculo;
 import repositorio.Repositorio;
 
 public class Apagar {
 
-	public Apagar() {
-		try {
-			String chave = "chave3";
-			Conta conta = Repositorio.lerConta(chave);
-			if (conta == null) 
-				throw new Exception(chave+" n�o encontrada");
-			
-			if(conta.getSaldo() != 0) 
-				throw new Exception("Conta com saldo n�o pode ser apagada ");
-			
-			Cliente cliente = conta.getCliente();
-			conta.setCliente(null);
-			cliente.setConta(null);
-			Repositorio.apagar(conta);	
-			Repositorio.apagar(cliente);	
-			System.out.println("apagou conta da chave "+chave);
-		} catch (Exception e) {
-			System.out.println("--->"+e.getMessage());
-		}	
-	}
+  public Apagar() {
+    try {
+      Veiculo veic = Repositorio.lerPlaca("JKL-3456");
 
-	public static void main(String[] args) {
-		new Apagar();
-	}
+      Bilhete bil = veic.getListaBilhete().getFirst();
+
+      Estacionamento est = bil.getEstacionamento();
+
+      System.out.println("Veiculo: " + veic);
+      System.out.println("Estacionamento: " + est);
+      System.out.println("Bilhete: " + bil);
+      Repositorio.deletar(veic);
+      Repositorio.deletar(est);
+
+      bil.setEstacionamento(null);
+      
+      System.out.println("Estacionamento: " + bil.getEstacionamento());
+      Repositorio.gravar(bil);
+      System.out.println("Bilhete: " + bil);
+
+      // fica orfão
+      Repositorio.deletar(bil);      
+
+      bil = Repositorio.lerId(bil.getId(), Bilhete.class);
+
+      System.out.println("Bilhete: " + bil);
+    } catch (Exception e) {
+      System.out.println("--->" + e.getMessage());
+    }
+  }
+
+  public static void main(String[] args) {
+    new Apagar();
+  }
 }
