@@ -1,10 +1,12 @@
 package repositorio;
 
+import java.text.ParseException;
 import java.util.List;
 
 import com.db4o.ObjectContainer;
 import com.db4o.query.Query;
 
+import modelo.Bilhete;
 import modelo.Identificavel;
 import modelo.Veiculo;
 
@@ -55,4 +57,33 @@ public class Repositorio {
     manager.delete(object);
     manager.commit();
   }
+
+  public static List<Bilhete> lerBilheteMaiorValorPago(Double valorpago) {
+    Query query = manager.query();
+
+    query.constrain(Bilhete.class);
+    query.descend("valorpago").constrain(valorpago).greater();
+
+    return query.execute();
+  }
+
+  public static List<Veiculo> lerVeiculoEstacionadoData(Integer estacionamentoId, String data) throws ParseException {
+    Query query = manager.query();
+
+    query.constrain(Veiculo.class);
+    query.descend("listaBilhete").descend("estacionamento").descend("id").constrain(estacionamentoId);
+    query.descend("listaBilhete").descend("data").constrain(data);
+
+    return query.execute();
+  }
+
+  public static List<Veiculo> lerVeiculoMaisBilhetes(Integer quantidadeBilhetes) {
+    Query query = manager.query();
+
+    query.constrain(Veiculo.class);
+    query.constrain(new Filtro(quantidadeBilhetes));
+
+    return query.execute();
+  }
+
 }
