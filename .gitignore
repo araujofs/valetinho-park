@@ -1,2 +1,2 @@
 *.class
-banco.db4o
+*.db4o

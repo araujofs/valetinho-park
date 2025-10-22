@@ -1,19 +1,16 @@
 package modelo;
 
 public class Bilhete implements Identificavel {
-  static Integer autoId = 1;
   private Estacionamento estacionamento;
   private String data;
   private Double valorpago;
-  private Integer id;
+  private int id;
   
   public Bilhete(Estacionamento estacionamento, String data, Double valorpago) {
     this.data = data;
     System.out.println(data);
     this.estacionamento = estacionamento;
     this.valorpago = valorpago;
-    this.id = autoId;
-    autoId++;
   }
 
   public Estacionamento getEstacionamento() {

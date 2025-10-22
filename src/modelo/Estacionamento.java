@@ -3,15 +3,12 @@ package modelo;
 import java.util.ArrayList;
 
 public class Estacionamento implements Identificavel {
-  static Integer autoId = 1;
-  private Integer id;
+  private int id;
   private ArrayList<Bilhete> listaBilhete = new ArrayList<>();
   private Localizacao localizacao;
 
   public Estacionamento(Localizacao localizacao) {
     this.localizacao = localizacao;
-    this.id = autoId;
-    autoId++;
   }
 
   public void addBilhete(Bilhete bilhete) throws Exception {

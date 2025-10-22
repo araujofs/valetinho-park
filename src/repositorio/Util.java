@@ -57,7 +57,7 @@ class ControleID {
   private static TreeMap<String, SequenciaID> memoriaSequencias = new TreeMap<>();
   private static boolean salvar;
 
-  public static void ativar(EmbeddedObjectContainer manager) {
+  public static void ativar(ObjectContainer manager) {
     bancoSequencias = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), "sequencias.db4o");
 
     lerSequenciasID();
@@ -67,6 +67,7 @@ class ControleID {
     events.creating().addListener((_, args) -> {
       try {
         Object objeto = args.object();
+
         Field campo = objeto.getClass().getDeclaredField("id");
 
         if (campo != null) {
@@ -79,7 +80,20 @@ class ControleID {
           memoriaSequencias.put(nomeClasse, sequencia);
           salvar = true;
         }
+
+
       } catch (Exception e) {
+        System.out.println(e);
+      }
+    });
+
+    events.created().addListener((_, _) -> {
+      salvarSequenciasID();
+    });
+
+    events.closing().addListener((_, _) -> {
+      if (bancoSequencias != null && !bancoSequencias.ext().isClosed()) {
+        bancoSequencias.close();
       }
     });
   }
@@ -90,23 +104,29 @@ class ControleID {
 
     List<SequenciaID> resultado = query.execute();
 
-    for (SequenciaID sequencia : resultado) {
-      memoriaSequencias.put(sequencia.getNomeClasse(), sequencia);
+    for (SequenciaID seq : resultado) {
+      memoriaSequencias.put(seq.getNomeClasse(), seq);
     }
 
     salvar = false;
   }
 
   public static SequenciaID obterSequenciaID(String nomeClasse) {
-    SequenciaID sequencia = null;
+    return memoriaSequencias.containsKey(nomeClasse) ? memoriaSequencias.get(nomeClasse) : new SequenciaID(nomeClasse);
+  }
 
-    if (memoriaSequencias.containsKey(nomeClasse)) {
-      sequencia = memoriaSequencias.get(nomeClasse);
-    } else {
-      sequencia = new SequenciaID(nomeClasse);
+  public static void salvarSequenciasID() {
+    if (!salvar)
+      return;
+
+    for (SequenciaID seq : memoriaSequencias.values()) {
+      if (seq.isModificado()) {
+        bancoSequencias.store(seq);
+        seq.setModificado(false);
+      }
     }
 
-    return sequencia;
+    bancoSequencias.commit();
   }
 
 }
