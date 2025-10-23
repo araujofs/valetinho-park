@@ -9,7 +9,6 @@ public class Bilhete implements Identificavel {
   
   public Bilhete(Estacionamento estacionamento, Veiculo veiculo, String data, Double valorpago) {
     this.data = data;
-    System.out.println(data);
     this.estacionamento = estacionamento;
     this.veiculo = veiculo;
     this.valorpago = valorpago;

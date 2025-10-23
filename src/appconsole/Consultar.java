@@ -1,5 +1,6 @@
 package appconsole;
 
+import modelo.Veiculo;
 import repositorio.Repositorio;
 
 public class Consultar {
@@ -12,13 +13,16 @@ public class Consultar {
       System.out.println();
 
       // veiculos estacionados na data x no estacionamento y
-      System.out.println("--------- veiculos estacionados na data x no estacionamento y");
-      System.out.println(Repositorio.lerVeiculoEstacionadoData(1, "13/10/2025"));
+      System.out.println("--------- veiculos estacionados na data 23/10/2025 no estacionamento de id 1");
+      System.out.println(Repositorio.lerVeiculoEstacionadoData(1, "23/10/2025"));
       System.out.println();
 
       // veiculos com mais de n bilhetes
-      System.out.println("--------- veiculos com mais de n bilhetes");
-      System.out.println(Repositorio.lerVeiculoMaisBilhetes(1));
+      System.out.println("--------- veiculos com mais de 1 bilhetes");
+      for (Veiculo veic : Repositorio.lerVeiculoMaisBilhetes(1)) {
+        System.out.println(veic + " quantidade de bilhetes: " + veic.getListaBilhete().size());
+      }
+
       System.out.println();
     } catch (Exception e) {
       System.out.println("--->" + e.getMessage());
