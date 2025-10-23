@@ -56,25 +56,25 @@ public class Cadastrar {
 
       // Bilhetes (associados a estacionamento e veículo)
       LocalDate today = LocalDate.now();
-      Bilhete b1 = new Bilhete(e1, today.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 10.0);
-      Bilhete b2 = new Bilhete(e1, today.minusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 12.5);
-      Bilhete b3 = new Bilhete(e2, today.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 8.0);
-      Bilhete b4 = new Bilhete(e3, today.minusDays(2).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 20.0);
-      Bilhete b5 = new Bilhete(e2, today.minusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 5.0);
-      Bilhete b6 = new Bilhete(e4, today.minusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 7.5);
-      Bilhete b7 = new Bilhete(e5, today.minusDays(3).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 15.0);
-      Bilhete b8 = new Bilhete(e6, today.minusDays(4).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 3.0);
-      Bilhete b9 = new Bilhete(e4, today.minusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 6.0);
-      Bilhete b10 = new Bilhete(e5, today.minusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 9.0);
-      Bilhete b11 = new Bilhete(e6, today.minusDays(2).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 11.0);
-      Bilhete b12 = new Bilhete(e3, today.minusDays(3).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 18.0);
+      Bilhete b1 = new Bilhete(e1, v1, today.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 10.0);
+      Bilhete b2 = new Bilhete(e1, v2, today.minusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 12.5);
+      Bilhete b3 = new Bilhete(e2, v2, today.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 8.0);
+      Bilhete b4 = new Bilhete(e3, v3, today.minusDays(2).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 20.0);
+      Bilhete b5 = new Bilhete(e2, v1, today.minusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 5.0);
+      Bilhete b6 = new Bilhete(e4, v4, today.minusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 7.5);
+      Bilhete b7 = new Bilhete(e5, v5, today.minusDays(3).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 15.0);
+      Bilhete b8 = new Bilhete(e6, v6, today.minusDays(4).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 3.0);
+      Bilhete b9 = new Bilhete(e4, v4, today.minusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 6.0);
+      Bilhete b10 = new Bilhete(e5, v5, today.minusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 9.0);
+      Bilhete b11 = new Bilhete(e6, v6, today.minusDays(2).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 11.0);
+      Bilhete b12 = new Bilhete(e3, v3, today.minusDays(3).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 18.0);
 
-      Bilhete b13 = new Bilhete(e7, today.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 13.0);
-      Bilhete b14 = new Bilhete(e8, today.minusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 14.5);
-      Bilhete b15 = new Bilhete(e9, today.minusDays(2).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 16.0);
-      Bilhete b16 = new Bilhete(e10, today.minusDays(3).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 17.5);
-      Bilhete b17 = new Bilhete(e11, today.minusDays(4).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 19.0);
-      Bilhete b18 = new Bilhete(e12, today.minusDays(5).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 21.0);
+      Bilhete b13 = new Bilhete(e7, v7, today.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 13.0);
+      Bilhete b14 = new Bilhete(e8, v8, today.minusDays(1).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 14.5);
+      Bilhete b15 = new Bilhete(e9, v9, today.minusDays(2).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 16.0);
+      Bilhete b16 = new Bilhete(e10, v10, today.minusDays(3).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 17.5);
+      Bilhete b17 = new Bilhete(e11, v11, today.minusDays(4).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 19.0);
+      Bilhete b18 = new Bilhete(e12, v12, today.minusDays(5).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 21.0);
 
       // ligar bilhetes às listas internas
       e1.addBilhete(b1);

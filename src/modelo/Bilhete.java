@@ -2,15 +2,25 @@ package modelo;
 
 public class Bilhete implements Identificavel {
   private Estacionamento estacionamento;
+  private Veiculo veiculo;
   private String data;
   private Double valorpago;
   private int id;
   
-  public Bilhete(Estacionamento estacionamento, String data, Double valorpago) {
+  public Bilhete(Estacionamento estacionamento, Veiculo veiculo, String data, Double valorpago) {
     this.data = data;
     System.out.println(data);
     this.estacionamento = estacionamento;
+    this.veiculo = veiculo;
     this.valorpago = valorpago;
+  }
+
+  public Veiculo getVeiculo() {
+    return veiculo;
+  }
+
+  public void setVeiculo(Veiculo veic) {
+    this.veiculo = veic;
   }
 
   public Estacionamento getEstacionamento() {
@@ -35,6 +45,6 @@ public class Bilhete implements Identificavel {
 
   @Override
   public String toString() {
-    return "[id=" + id + ", data=" + data + ", valorpago=" + valorpago + "]";
+    return "[id=" + id + ", data=" + data + ", valorpago=" + valorpago + ", estacionamentoID=" + estacionamento.getId() + ", veiculoPlaca=" + veiculo.getPlaca() + "]";
   }
 }
