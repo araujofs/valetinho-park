@@ -24,15 +24,18 @@ public class Util {
       EmbeddedConfiguration config = Db4oEmbedded.newConfiguration();
       config.common().messageLevel(0);
 
+      // cascadeDelete como false para que estacionamento e veiculo nao sejam excluidos ao excluir um bilhete
       config.common().objectClass(Bilhete.class).cascadeOnDelete(false);
       config.common().objectClass(Bilhete.class).cascadeOnUpdate(true);
       config.common().objectClass(Bilhete.class).cascadeOnActivate(true);
 
-      config.common().objectClass(Veiculo.class).cascadeOnDelete(false);
-      config.common().objectClass(Veiculo.class).cascadeOnDelete(false);
+      // cascadeDelete como true para que bilhetes sejam excluidos tambem
+      config.common().objectClass(Veiculo.class).cascadeOnDelete(true);
       config.common().objectClass(Veiculo.class).cascadeOnUpdate(true);
+      config.common().objectClass(Veiculo.class).cascadeOnActivate(true);
 
-      config.common().objectClass(Estacionamento.class).cascadeOnActivate(true);
+      // cascadeDelete como true para que bilhetes sejam excluidos tambem
+      config.common().objectClass(Estacionamento.class).cascadeOnDelete(true);
       config.common().objectClass(Estacionamento.class).cascadeOnUpdate(true);
       config.common().objectClass(Estacionamento.class).cascadeOnActivate(true);
 

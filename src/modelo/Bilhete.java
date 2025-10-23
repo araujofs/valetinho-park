@@ -47,4 +47,18 @@ public class Bilhete implements Identificavel {
   public String toString() {
     return "[id=" + id + ", data=" + data + ", valorpago=" + valorpago + ", estacionamentoID=" + estacionamento.getId() + ", veiculoPlaca=" + veiculo.getPlaca() + "]";
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Bilhete other = (Bilhete) obj;
+    if (id != other.getId())
+      return false;
+    return true;
+  }
 }
