@@ -26,6 +26,17 @@ public class EstacionamentoRepositorio extends CRUDRepositorio<Estacionamento>{
     else
       return null;
   }
+
+  public Estacionamento ler(Integer id) {
+    Query q = Util.getManager().query();
+    q.constrain(Estacionamento.class);
+    q.descend("id").constrain(id);
+    List<Estacionamento> resultado = q.execute();
+    if (resultado.size() > 0)
+      return resultado.getFirst();
+    else
+      return null;
+  }
   
   public void removeBilhete(Estacionamento estacionamento, Bilhete bilhete) {
     estacionamento.getBilhetes().remove(bilhete);

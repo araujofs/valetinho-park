@@ -113,17 +113,18 @@ public class Fachada {
     estacionamentoRep.desconectar();
   }
 
-  public static void alterarEstacionamento(String nome, ArrayList<Bilhete> bilhetes, Localizacao localizacao)
+  public static void alterarEstacionamento(Integer id, String nome, ArrayList<Bilhete> bilhetes, Localizacao localizacao)
       throws Exception {
     estacionamentoRep.conectar();
-    Estacionamento p = estacionamentoRep.ler(nome);
+    Estacionamento p = estacionamentoRep.ler(id);
     if (p == null) {
       estacionamentoRep.rollback();
-      throw new Exception("alterar estacionamento - estacionamento inexistente:" + nome);
+      throw new Exception("alterar estacionamento - estacionamento inexistente:" + id);
     }
 
-    p.setBilhetes(bilhetes); // limpar apelidos atuais
+    p.setBilhetes(bilhetes); 
     p.setLocalizacao(localizacao);
+    p.setNome(nome);
 
     estacionamentoRep.atualizar(p);
     estacionamentoRep.commit();
@@ -234,16 +235,16 @@ public class Fachada {
    * 
    **********************************************************/
 
-  public static List<Bilhete> consultarBilhetesValorMenorX(Double x) {
+  public static List<Bilhete> consultarBilhetesValorMaiorX(Double x) {
     bilheteRep.conectar();
     List<Bilhete> bilhetes = bilheteRep.lerBilheteMaiorValorPago(x);
     bilheteRep.desconectar();
     return bilhetes;
   }
 
-  public static List<Veiculo> consultarVeiculoEstacionadoDataX(Date x, Integer idEstacionamento) {
+  public static List<Veiculo> consultarVeiculoEstacionadoDataX(Date x, String nomeEstacionamento) {
     veiculoRep.conectar();
-    List<Veiculo> veiculos = veiculoRep.lerVeiculoEstacionadoData(idEstacionamento, Fachada.inicioDoDia(x), Fachada.fimDoDia(x));
+    List<Veiculo> veiculos = veiculoRep.lerVeiculoEstacionadoData(nomeEstacionamento, Fachada.inicioDoDia(x), Fachada.fimDoDia(x));
     veiculoRep.desconectar();
     return veiculos;
   }

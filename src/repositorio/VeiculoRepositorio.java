@@ -34,11 +34,11 @@ public class VeiculoRepositorio extends CRUDRepositorio<Veiculo> {
     this.atualizar(veiculo);
   }
 
-  public List<Veiculo> lerVeiculoEstacionadoData(Integer estacionamentoId, Date inicioDia, Date fimDia) {
+  public List<Veiculo> lerVeiculoEstacionadoData(String estacionamentoNome, Date inicioDia, Date fimDia) {
     Query query = Util.getManager().query();
 
     query.constrain(Veiculo.class);
-    query.descend("listaBilhete").descend("estacionamento").descend("id").constrain(estacionamentoId);
+    query.descend("listaBilhete").descend("estacionamento").descend("nome").constrain(estacionamentoNome);
     query.descend("listaBilhete").descend("data").constrain(inicioDia).greater();
     query.descend("listaBilhete").descend("data").constrain(fimDia).smaller();
 

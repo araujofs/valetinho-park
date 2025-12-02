@@ -20,9 +20,9 @@ import javax.swing.SwingConstants;
 
 public class TelaPrincipal {
 	private JFrame frame;
-	private JMenu mnPessoa;
-	private JMenu mnAluno;
-	private JMenu mnTelefone;
+	private JMenu mnVeiculo;
+	private JMenu mnEstacionamento;
+	private JMenu mnBilhete;
 	private JMenu mnConsulta;
 	private JLabel label;
 
@@ -54,8 +54,8 @@ public class TelaPrincipal {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setTitle("Agenda");
-		frame.setBounds(100, 100, 450, 300);
+		frame.setTitle("Valetinho Park");
+		frame.setBounds(100, 100, 900, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setResizable(false);
@@ -66,39 +66,40 @@ public class TelaPrincipal {
 		label.setBounds(0, 0, 444, 249);
 		label.setText("Inicializando...");
 		label.setBounds(0, 0, frame.getWidth(), frame.getHeight());
-		ImageIcon imagem = new ImageIcon(getClass().getResource("/imagens/agenda.jpg"));
+		ImageIcon imagem = new ImageIcon(getClass().getResource("/imagens/images.jpg"));
 		imagem = new ImageIcon(imagem.getImage().getScaledInstance(label.getWidth(),label.getHeight(), Image.SCALE_DEFAULT));
 		label.setIcon(imagem);
 		frame.getContentPane().add(label);
 
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
-		mnPessoa = new JMenu("Pessoa");
-		mnPessoa.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				new TelaVeiculo();
-			}
-		});
-		menuBar.add(mnPessoa);
+
+		// mnPessoa = new JMenu("Veiculo");
+		// mnPessoa.addMouseListener(new MouseAdapter() {
+		// 	@Override
+		// 	public void mouseClicked(MouseEvent e) {
+		// 		new TelaVeiculo();
+		// 	}
+		// });
+		// menuBar.add(mnPessoa);
 		
-		mnAluno = new JMenu("Aluno");
-		mnAluno.addMouseListener(new MouseAdapter() {
+		mnEstacionamento = new JMenu("Estacionamento");
+		mnEstacionamento.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				new TelaEstacionamento();
 			}
 		});
-		menuBar.add(mnAluno);
+		menuBar.add(mnEstacionamento);
 
-		mnTelefone = new JMenu("Telefone");
-		mnTelefone.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				new TelaBilhete();
-			}
-		});
-		menuBar.add(mnTelefone);
+		// mnBilhete = new JMenu("Bilhete");
+		// mnBilhete.addMouseListener(new MouseAdapter() {
+		// 	@Override
+		// 	public void mouseClicked(MouseEvent e) {
+		// 		new TelaBilhete();
+		// 	}
+		// });
+		// menuBar.add(mnBilhete);
 		
 		mnConsulta = new JMenu("Consulta");
 		mnConsulta.addMouseListener(new MouseAdapter() {

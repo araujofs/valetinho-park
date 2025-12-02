@@ -43,6 +43,10 @@ public class Estacionamento implements Identificavel {
     return this.nome;
   }
 
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
+
   @Override
   public String toString() {
     return "[id=" + id + ", localizacao=" + localizacao + "]";
