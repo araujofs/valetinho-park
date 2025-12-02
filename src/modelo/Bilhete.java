@@ -1,16 +1,27 @@
 package modelo;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Bilhete implements Identificavel {
   private Estacionamento estacionamento;
   private Veiculo veiculo;
-  private String data;
+  private Date data;
   private Double valorpago;
   private int id;
   
-  public Bilhete(Estacionamento estacionamento, Veiculo veiculo, String data, Double valorpago) {
+  public Bilhete(Estacionamento estacionamento, Veiculo veiculo, Date data, Double valorpago) {
     this.data = data;
     this.estacionamento = estacionamento;
     this.veiculo = veiculo;
+    this.valorpago = valorpago;
+  }
+
+  public void setData(Date data) {
+    this.data = data;
+  }
+
+  public void setValorpago(Double valorpago) {
     this.valorpago = valorpago;
   }
 
@@ -30,8 +41,12 @@ public class Bilhete implements Identificavel {
     this.estacionamento = est;
   }
 
-  public String getData() {
+  public Date getData() {
     return data;
+  }
+
+  public String getDataFormatada() {
+    return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(this.data);
   }
 
   public Double getValorpago() {
@@ -44,7 +59,7 @@ public class Bilhete implements Identificavel {
 
   @Override
   public String toString() {
-    return "[id=" + id + ", data=" + data + ", valorpago=" + valorpago + ", estacionamentoID=" + estacionamento.getId() + ", veiculoPlaca=" + veiculo.getPlaca() + "]";
+    return "[id=" + id + ", data=" + getDataFormatada() + ", valorpago=" + valorpago + ", estacionamentoID=" + estacionamento.getId() + ", veiculoPlaca=" + veiculo.getPlaca() + "]";
   }
 
   @Override

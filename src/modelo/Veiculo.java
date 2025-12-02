@@ -4,22 +4,26 @@ import java.util.ArrayList;
 
 public class Veiculo {
   private String placa;
-  private ArrayList<Bilhete> listaBilhete = new ArrayList<>();
+  private ArrayList<Bilhete> bilhetes = new ArrayList<>();
   
   public Veiculo(String placa) {
     this.placa = placa;
   }
 
   public void addBilhete(Bilhete bilhete) {
-    this.listaBilhete.add(bilhete);
+    this.bilhetes.add(bilhete);
+  }
+
+  public void setBilhetes(ArrayList<Bilhete> bilhetes) {
+    this.bilhetes = bilhetes;
   }
 
   public String getPlaca() {
     return placa;
   }
 
-  public ArrayList<Bilhete> getListaBilhete() {
-    return listaBilhete;
+  public ArrayList<Bilhete> getBilhetes() {
+    return bilhetes;
   }
 
   @Override
