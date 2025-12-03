@@ -3,34 +3,43 @@ package appconsole;
 import modelo.Bilhete;
 import modelo.Estacionamento;
 import modelo.Veiculo;
-import repositorio.Repositorio;
+import requisito.Fachada;
 
+/**
+ * Classe para listar todos os dados do sistema via console.
+ * Usa a Fachada para acessar os dados.
+ */
 public class Listar {
 
   public Listar() {
     try {
-      System.out.println("\n---------listagem de estacionamentos-----");
-      for (Estacionamento e : Repositorio.lerTodos(Estacionamento.class)) {
+      System.out.println("\n========== LISTAGEM DE ESTACIONAMENTOS ==========");
+      for (Estacionamento e : Fachada.listarEstacionamento()) {
         System.out.println(e);
-        for (Bilhete b : e.getListaBilhete()) {
-          System.out.println("   " + b);
+        System.out.println("   Bilhetes (" + e.getBilhetes().size() + "):");
+        for (Bilhete b : e.getBilhetes()) {
+          System.out.println("      " + b);
         }
+        System.out.println();
       }
 
-      System.out.println("\n---------listagem de veiculos-----");
-      for (Veiculo v : Repositorio.lerTodos(Veiculo.class)) {
+      System.out.println("\n========== LISTAGEM DE VEÍCULOS ==========");
+      for (Veiculo v : Fachada.listarVeiculos()) {
         System.out.println(v);
-        for (Bilhete b : v.getListaBilhete()) {
-          System.out.println("   " + b);
+        System.out.println("   Bilhetes (" + v.getBilhetes().size() + "):");
+        for (Bilhete b : v.getBilhetes()) {
+          System.out.println("      " + b);
         }
+        System.out.println();
       }
 
-      System.out.println("\n---------listagem de bilhetes-----");
-      for (Bilhete b : Repositorio.lerTodos(Bilhete.class)) {
+      System.out.println("\n========== LISTAGEM DE BILHETES ==========");
+      for (Bilhete b : Fachada.listarBilhete()) {
         System.out.println(b);
       }
+      
     } catch (Exception e) {
-      System.out.println("--->" + e);
+      System.out.println("ERRO: " + e.getMessage());
     }
   }
 
