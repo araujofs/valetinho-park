@@ -204,21 +204,20 @@ public class TelaConsulta {
       String texto2;
       for (Veiculo p : lista) {
         if (p.getBilhetes().size() > 0) {
-          texto2 = "";
+          texto2 = p.getBilhetes().size() + " bilhete(s): ";
           for (Bilhete t : p.getBilhetes())
             texto2 += t.getId() + " ";
         } else
           texto2 = "sem bilhetes";
         // adicionar linha no table
-        model.addRow(new Object[] { p.getPlaca(), texto2 });
+        model.addRow(new Object[] { p.getPlaca(), texto2.trim() });
 
       }
-      // redimensionar a coluna 0,3 e 4
-      table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // desabilita
-      table.getColumnModel().getColumn(0).setMaxWidth(40); // coluna id
-      table.getColumnModel().getColumn(3).setMinWidth(200); // coluna dos apelidos
-      table.getColumnModel().getColumn(4).setMinWidth(200); // coluna dos telefones
-      table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS); // desabilita
+      // redimensionar as colunas
+      table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+      table.getColumnModel().getColumn(0).setMinWidth(100); // coluna placa
+      table.getColumnModel().getColumn(1).setMinWidth(300); // coluna bilhetes
+      table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
     } catch (Exception erro) {
       label.setText(erro.getMessage());

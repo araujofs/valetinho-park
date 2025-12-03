@@ -32,7 +32,8 @@ public class Fachada {
     veiculoRep.conectar();
     Veiculo p = veiculoRep.ler(placa);
     if (p == null) {
-      throw new Exception("veiculo inexistente:" + placa);
+      veiculoRep.desconectar();
+      throw new Exception("veiculo inexistente: " + placa);
     }
     veiculoRep.desconectar();
     return p;
@@ -104,7 +105,8 @@ public class Fachada {
     estacionamentoRep.conectar();
     Estacionamento p = estacionamentoRep.ler(nome);
     if (p == null) {
-      throw new Exception("veiculo inexistente:" + nome);
+      estacionamentoRep.desconectar();
+      throw new Exception("estacionamento inexistente: " + nome);
     }
     estacionamentoRep.desconectar();
     return p;
@@ -114,7 +116,8 @@ public class Fachada {
     estacionamentoRep.conectar();
     Estacionamento p = estacionamentoRep.ler(nome);
     if (p != null) {
-      throw new Exception("criar estacionamento - estacionamento ja existe com nome :" + nome);
+      estacionamentoRep.desconectar();
+      throw new Exception("criar estacionamento - estacionamento ja existe com nome: " + nome);
     }
     p = new Estacionamento(localizacao, nome);
     estacionamentoRep.criar(p);
@@ -169,7 +172,8 @@ public class Fachada {
     bilheteRep.conectar();
     Bilhete p = bilheteRep.ler(id);
     if (p == null) {
-      throw new Exception("bilhete inexistente:" + id);
+      bilheteRep.desconectar();
+      throw new Exception("bilhete inexistente: " + id);
     }
     bilheteRep.desconectar();
     return p;
