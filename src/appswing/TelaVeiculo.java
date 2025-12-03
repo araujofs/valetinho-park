@@ -29,6 +29,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 import modelo.Veiculo;
+import modelo.Bilhete;
 import requisito.Fachada;
 
 public class TelaVeiculo {
@@ -86,12 +87,23 @@ public class TelaVeiculo {
         try {
           if (table.getSelectedRow() >= 0) {
             String placa = (String) table.getValueAt(table.getSelectedRow(), 0);
-            Integer qtdBilhetes = (Integer) table.getValueAt(table.getSelectedRow(), 1);
+            Veiculo v = Fachada.localizarVeiculo(placa);
             
             placaSelecionada = placa; // guarda a placa original
             textField_1.setText(placa);
             textField_2.setText("");
-            textField_3.setText(qtdBilhetes + " bilhete(s)");
+            
+            String bilhetes;
+            int qtd = v.getBilhetes().size();
+            if (qtd == 0) {
+              bilhetes = "0 bilhete(s)";
+            } else {
+              bilhetes = qtd + " bilhete(s): ";
+              for (Bilhete b : v.getBilhetes()) {
+                bilhetes += b.getId() + " ";
+              }
+            }
+            textField_3.setText(bilhetes.trim());
             label.setText("");
           }
         } catch (Exception erro) {
