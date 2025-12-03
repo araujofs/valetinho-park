@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
  * Prof. Fausto Ayres
  **********************************/
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -48,21 +47,6 @@ public class Fachada {
     }
     p = new Veiculo(placa);
     veiculoRep.criar(p);
-    veiculoRep.commit();
-    veiculoRep.desconectar();
-  }
-
-  public static void alterarVeiculo(String placa, ArrayList<Bilhete> bilhetes) throws Exception {
-    veiculoRep.conectar();
-    Veiculo p = veiculoRep.ler(placa);
-    if (p == null) {
-      veiculoRep.rollback();
-      throw new Exception("alterar veiculo - veiculo inexistente:" + placa);
-    }
-
-    p.setBilhetes(bilhetes); // limpar apelidos atuais
-
-    veiculoRep.atualizar(p);
     veiculoRep.commit();
     veiculoRep.desconectar();
   }
@@ -138,7 +122,7 @@ public class Fachada {
     estacionamentoRep.desconectar();
   }
 
-  public static void alterarEstacionamento(Integer id, String nome, ArrayList<Bilhete> bilhetes, Localizacao localizacao)
+  public static void alterarEstacionamento(Integer id, String nome, Localizacao localizacao)
       throws Exception {
     estacionamentoRep.conectar();
     Estacionamento p = estacionamentoRep.ler(id);
@@ -147,7 +131,7 @@ public class Fachada {
       throw new Exception("alterar estacionamento - estacionamento inexistente:" + id);
     }
 
-    p.setBilhetes(bilhetes); 
+    // Não mexer na lista de bilhetes - ela é gerenciada por criarBilhete/apagarBilhete
     p.setLocalizacao(localizacao);
     p.setNome(nome);
 

@@ -14,7 +14,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -255,20 +254,6 @@ public class TelaEstacionamento {
             return;
           }
           String nome = textField_2.getText();
-          ArrayList<Bilhete> bilhetes = new ArrayList<>();
-          String bilhetesText = textField_4.getText().trim();
-          if (!bilhetesText.isEmpty() && !bilhetesText.equals("sem bilhetes")) {
-            String[] tokens = bilhetesText.split("\\s+");
-            for (String t : tokens) {
-              try {
-                Integer id = Integer.parseInt(t);
-                Bilhete b = Fachada.localizarBilhete(id);
-                bilhetes.add(b);
-              } catch (Exception exInner) {
-                // ignorar token inválido
-              }
-            }
-          }
           String locText = textField_3.getText().trim();
           String[] parts = locText.split("\\s*,\\s*|\\s+");
           if (parts.length < 2)
@@ -278,7 +263,7 @@ public class TelaEstacionamento {
           Localizacao localizacao = new Localizacao(lx, ly);
           Integer id = Integer.valueOf(textField_1.getText());
 
-          Fachada.alterarEstacionamento(id, nome, bilhetes, localizacao);
+          Fachada.alterarEstacionamento(id, nome, localizacao);
 
           label.setText("estacionamento alterado");
           listagem();
