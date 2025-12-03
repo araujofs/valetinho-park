@@ -22,6 +22,10 @@ public class Veiculo {
     return placa;
   }
 
+  public void setPlaca(String placa) {
+    this.placa = placa;
+  }
+
   public ArrayList<Bilhete> getBilhetes() {
     return bilhetes;
   }

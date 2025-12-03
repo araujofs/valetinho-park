@@ -1,8 +1,9 @@
-/**********************************
- * IFPB - SI
- * POB - Persistencia de Objetos
- * Prof. Fausto Ayres
- **********************************/
+/**
+ * IFPB - Curso Superior de Tec. em Sist. para Internet
+ * Persistencia de Objetos
+ * Prof. Fausto Maranh�o Ayres
+ */
+
 package appswing;
 
 import java.awt.Color;
@@ -13,8 +14,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -30,357 +29,270 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
-import modelo.Pessoa;
-import modelo.Telefone;
+import modelo.Veiculo;
 import requisito.Fachada;
 
 public class TelaVeiculo {
-	private JDialog frame;
-	private JTable table;
-	private JScrollPane scrollPane;
-	private JButton button_3;
-	private JLabel label;
-	private JLabel label_2;
-	private JLabel label_3;
-	private JLabel label_4;
-	private JButton button_1;
-	private JButton button_2;
-	private JButton button_4;
-	private JLabel label_8;
+  private JDialog frame;
+  private JTable table;
+  private JScrollPane scrollPane;
+  private JButton button;
+  private JButton button_1;
+  private JButton button_2;
+  private JButton button_3;
+  private JButton button_4;
+  private JLabel label;
+  private JLabel label_2;
+  private JLabel label_3;
+  private JLabel label_4;
+  private JLabel label_5;
+  private JTextField textField_1;
+  private JTextField textField_2;
+  private JTextField textField_3;
 
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_5;
-	private JLabel label_5;
-	private JLabel label_6;
-	private JTextField textField_4;
-	private JButton button;
+  private String placaSelecionada = null; // guarda a placa original selecionada
 
-	/**
-	 * Launch the application.
-	 */
-	// public static void main(String[] args) {
-	// EventQueue.invokeLater(new Runnable() {
-	// public void run() {
-	// try {
-	// TelaReuniao window = new TelaReuniao();
-	// window.frame.setVisible(true);
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-	// });
-	// }
+  public TelaVeiculo() {
+    initialize();
+  }
 
-	/**
-	 * Create the application.
-	 */
-	public TelaVeiculo() {
-		initialize();
-	}
+  private void initialize() {
+    frame = new JDialog();
+    frame.setModal(true);
+    frame.addWindowListener(new WindowAdapter() {
+      @Override
+      public void windowOpened(WindowEvent arg0) {
+        listagem();
+      }
+    });
+    frame.setTitle("Veículos");
+    frame.setBounds(100, 100, 550, 400);
+    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    frame.getContentPane().setLayout(null);
+    frame.setResizable(false);
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frame = new JDialog();
-		frame.setResizable(false);
-		frame.setModal(true);
-		frame.setTitle("Pessoa");
-		frame.setBounds(100, 100, 813, 438);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-		frame.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowOpened(WindowEvent arg0) {
-				listagem();
-			}
+    scrollPane = new JScrollPane();
+    scrollPane.setBounds(21, 45, 490, 140);
+    frame.getContentPane().add(scrollPane);
 
-		});
+    table = new JTable() {
+      public boolean isCellEditable(int rowIndex, int vColIndex) {
+        return false;
+      }
+    };
 
-		scrollPane = new JScrollPane();
-		scrollPane.setBounds(21, 39, 751, 147);
-		frame.getContentPane().add(scrollPane);
+    table.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        try {
+          if (table.getSelectedRow() >= 0) {
+            String placa = (String) table.getValueAt(table.getSelectedRow(), 0);
+            Integer qtdBilhetes = (Integer) table.getValueAt(table.getSelectedRow(), 1);
+            
+            placaSelecionada = placa; // guarda a placa original
+            textField_1.setText(placa);
+            textField_2.setText("");
+            textField_3.setText(qtdBilhetes + " bilhete(s)");
+            label.setText("");
+          }
+        } catch (Exception erro) {
+          label.setText(erro.getMessage());
+        }
+      }
+    });
 
-		table = new JTable() { // heran�a de JTable
-			public boolean isCellEditable(int rowIndex, int vColIndex) {
-				return false; // desabilita edicao de celulas
-			}
-		};
-		table.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				try {
-					label.setText("");
-					if (table.getSelectedRow() >= 0) {
-						// copiar os dados da pessoa selecionada para os textfields
-						String nome = (String) table.getValueAt(table.getSelectedRow(), 1);
-						Pessoa p = Fachada.localizarPessoa(nome);
+    table.setGridColor(Color.BLACK);
+    table.setRequestFocusEnabled(false);
+    table.setFocusable(false);
+    table.setBackground(Color.WHITE);
+    table.setFillsViewportHeight(true);
+    table.setRowSelectionAllowed(true);
+    table.setFont(new Font("Tahoma", Font.PLAIN, 14));
+    scrollPane.setViewportView(table);
+    table.setBorder(new LineBorder(new Color(0, 0, 0)));
+    table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    table.setShowGrid(true);
+    table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
-						textField_1.setText(nome);
-						textField_2.setText(p.getDtNascimento());
-						textField_3.setText(String.join(",", p.getApelidos()));
-						textField_5.setText("");
-						String telefones;
-						if (p.getTelefones().size() == 0)
-							telefones = "sem telefone";
-						else {
-							telefones = "";
-							for (Telefone t : p.getTelefones())
-								telefones = telefones + " " + t.getNumero();
-						}
-						textField_4.setText(telefones);
-					}
-				} catch (Exception erro) {
-					label.setText(erro.getMessage());
-				}
-			}
-		});
+    label = new JLabel("");
+    label.setForeground(Color.RED);
+    label.setBounds(21, 340, 500, 14);
+    frame.getContentPane().add(label);
 
-		table.setGridColor(Color.BLACK);
-		table.setRequestFocusEnabled(false);
-		table.setFocusable(false);
-		table.setBackground(Color.WHITE);
-		table.setFillsViewportHeight(true);
-		table.setRowSelectionAllowed(true);
-		table.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		scrollPane.setViewportView(table);
-		table.setBorder(new LineBorder(new Color(0, 0, 0)));
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setShowGrid(true);
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+    button = new JButton("Listar");
+    button.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        listagem();
+      }
+    });
+    button.setFont(new Font("Tahoma", Font.PLAIN, 12));
+    button.setBounds(220, 11, 109, 23);
+    frame.getContentPane().add(button);
 
-		label = new JLabel("");
-		label.setForeground(Color.RED);
-		label.setBounds(21, 374, 735, 14);
-		frame.getContentPane().add(label);
+    label_2 = new JLabel("selecione um veículo para editar");
+    label_2.setBounds(31, 190, 394, 14);
+    frame.getContentPane().add(label_2);
 
-		label_2 = new JLabel("selecione uma pessoa para editar");
-		label_2.setBounds(21, 187, 394, 14);
-		frame.getContentPane().add(label_2);
+    label_3 = new JLabel("placa:");
+    label_3.setHorizontalAlignment(SwingConstants.LEFT);
+    label_3.setFont(new Font("Tahoma", Font.PLAIN, 11));
+    label_3.setBounds(31, 215, 62, 14);
+    frame.getContentPane().add(label_3);
 
-		label_3 = new JLabel("nome:");
-		label_3.setHorizontalAlignment(SwingConstants.RIGHT);
-		label_3.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		label_3.setBounds(21, 216, 62, 14);
-		frame.getContentPane().add(label_3);
+    textField_1 = new JTextField();
+    textField_1.setFont(new Font("Dialog", Font.PLAIN, 12));
+    textField_1.setColumns(10);
+    textField_1.setBackground(Color.WHITE);
+    textField_1.setBounds(100, 212, 120, 20);
+    textField_1.setToolTipText("Ex: ABC-1234 ou ABC1D23");
+    frame.getContentPane().add(textField_1);
 
-		label_4 = new JLabel("nascimento:");
-		label_4.setHorizontalAlignment(SwingConstants.RIGHT);
-		label_4.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		label_4.setBounds(356, 216, 73, 14);
-		frame.getContentPane().add(label_4);
+    label_4 = new JLabel("nova placa:");
+    label_4.setHorizontalAlignment(SwingConstants.LEFT);
+    label_4.setFont(new Font("Tahoma", Font.PLAIN, 11));
+    label_4.setBounds(230, 215, 70, 14);
+    frame.getContentPane().add(label_4);
 
-		label_8 = new JLabel("novo numero:");
-		label_8.setHorizontalAlignment(SwingConstants.LEFT);
-		label_8.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		label_8.setBounds(21, 300, 74, 14);
-		frame.getContentPane().add(label_8);
+    textField_2 = new JTextField();
+    textField_2.setFont(new Font("Dialog", Font.PLAIN, 12));
+    textField_2.setColumns(10);
+    textField_2.setBounds(300, 212, 120, 20);
+    textField_2.setToolTipText("Nova placa para atualizar (Ex: XYZ-9999)");
+    frame.getContentPane().add(textField_2);
 
-		button_1 = new JButton("Criar");
-		button_1.setToolTipText("cadastrar nova pessoa");
-		button_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (textField_1.getText().isEmpty())
-					label.setText("nome vazio");
-				else
-					criarPessoa();
-			}
-		});
-		button_1.setBounds(548, 327, 95, 23);
-		frame.getContentPane().add(button_1);
+    label_5 = new JLabel("bilhetes:");
+    label_5.setFont(new Font("Tahoma", Font.PLAIN, 11));
+    label_5.setHorizontalAlignment(SwingConstants.LEFT);
+    label_5.setBounds(31, 245, 62, 14);
+    frame.getContentPane().add(label_5);
 
-		button_2 = new JButton("Atualizar");
-		button_2.setToolTipText("atualizar pessoa ");
-		button_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (textField_1.getText().isEmpty())
-					label.setText("nome vazio");
-				else
-					atualizarPessoaSelecionada();
-			}
-		});
-		button_2.setBounds(284, 327, 95, 23);
-		frame.getContentPane().add(button_2);
+    textField_3 = new JTextField();
+    textField_3.setFont(new Font("Dialog", Font.PLAIN, 12));
+    textField_3.setColumns(10);
+    textField_3.setEditable(false);
+    textField_3.setBackground(Color.WHITE);
+    textField_3.setBounds(100, 242, 320, 20);
+    textField_3.setToolTipText("IDs dos bilhetes associados (somente leitura)");
+    frame.getContentPane().add(textField_3);
 
-		button_3 = new JButton("Apagar");
-		button_3.setToolTipText("apagar pessoa e seus dados");
-		button_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (textField_1.getText().isEmpty())
-					label.setText("nome vazio");
-				else
-					apagarPessoaSelecionada();
-			}
-		});
-		button_3.setBounds(415, 327, 95, 23);
-		frame.getContentPane().add(button_3);
+    button_1 = new JButton("Criar");
+    button_1.setToolTipText("cadastrar novo veículo");
+    button_1.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        try {
+          if (textField_1.getText().isEmpty()) {
+            label.setText("placa vazia");
+            return;
+          }
+          String placa = textField_1.getText().trim();
+          Fachada.criarVeiculo(placa);
+          label.setText("veículo criado");
+          listagem();
+        } catch (Exception ex) {
+          label.setText(ex.getMessage());
+        }
+      }
+    });
+    button_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
+    button_1.setBounds(31, 300, 80, 23);
+    frame.getContentPane().add(button_1);
 
-		button_4 = new JButton("Limpar");
-		button_4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				textField_1.setText("");
-				textField_2.setText("");
-				textField_3.setText("");
-				textField_4.setText("");
-				textField_5.setText("");
-			}
-		});
-		button_4.setBounds(577, 212, 95, 23);
-		frame.getContentPane().add(button_4);
+    button_2 = new JButton("Atualizar");
+    button_2.setToolTipText("atualizar placa do veículo");
+    button_2.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        try {
+          if (placaSelecionada == null || placaSelecionada.isEmpty()) {
+            label.setText("selecione um veículo primeiro");
+            return;
+          }
+          if (textField_2.getText().isEmpty()) {
+            label.setText("nova placa vazia");
+            return;
+          }
+          String novaPlaca = textField_2.getText().trim();
+          Fachada.alterarPlacaVeiculo(placaSelecionada, novaPlaca);
+          label.setText("placa alterada");
+          placaSelecionada = null;
+          textField_1.setText("");
+          textField_2.setText("");
+          textField_3.setText("");
+          listagem();
+        } catch (Exception ex) {
+          label.setText(ex.getMessage());
+        }
+      }
+    });
+    button_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
+    button_2.setBounds(120, 300, 90, 23);
+    frame.getContentPane().add(button_2);
 
-		textField_1 = new JTextField();
-		textField_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField_1.setColumns(10);
-		textField_1.setBackground(Color.WHITE);
-		textField_1.setBounds(93, 213, 253, 20);
-		frame.getContentPane().add(textField_1);
+    button_3 = new JButton("Apagar");
+    button_3.setToolTipText("apagar veículo e seus bilhetes");
+    button_3.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        try {
+          if (textField_1.getText().isEmpty()) {
+            label.setText("placa vazia");
+            return;
+          }
+          String placa = textField_1.getText();
+          Object[] options = { "Confirmar", "Cancelar" };
+          int escolha = JOptionPane.showOptionDialog(null,
+              "Esta operação apagará o veículo e seus bilhetes: " + placa, "Alerta",
+              JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
+          if (escolha == 0) {
+            Fachada.apagarVeiculo(placa);
+            label.setText("veículo excluído");
+            placaSelecionada = null;
+            listagem();
+          } else {
+            label.setText("exclusão cancelada");
+          }
+        } catch (Exception erro) {
+          label.setText(erro.getMessage());
+        }
+      }
+    });
+    button_3.setFont(new Font("Tahoma", Font.PLAIN, 11));
+    button_3.setBounds(220, 300, 80, 23);
+    frame.getContentPane().add(button_3);
 
-		textField_2 = new JTextField();
-		textField_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField_2.setColumns(10);
-		textField_2.setBounds(439, 212, 87, 20);
-		frame.getContentPane().add(textField_2);
+    button_4 = new JButton("Limpar");
+    button_4.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        table.clearSelection();
+        placaSelecionada = null;
+        textField_1.setText("");
+        textField_2.setText("");
+        textField_3.setText("");
+        label.setText("");
+      }
+    });
+    button_4.setBounds(310, 300, 80, 23);
+    frame.getContentPane().add(button_4);
 
-		textField_3 = new JTextField();
-		textField_3.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField_3.setColumns(10);
-		textField_3.setBounds(93, 238, 433, 20);
-		frame.getContentPane().add(textField_3);
+    frame.setVisible(true);
+  }
 
-		textField_5 = new JTextField();
-		textField_5.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField_5.setColumns(10);
-		textField_5.setBounds(93, 296, 86, 20);
-		frame.getContentPane().add(textField_5);
+  public void listagem() {
+    try {
+      List<Veiculo> lista = Fachada.listarVeiculos();
 
-		label_5 = new JLabel("apelidos:");
-		label_5.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		label_5.setHorizontalAlignment(SwingConstants.RIGHT);
-		label_5.setBounds(21, 241, 62, 14);
-		frame.getContentPane().add(label_5);
+      DefaultTableModel model = new DefaultTableModel();
+      table.setModel(model);
 
-		label_6 = new JLabel("telefones:");
-		label_6.setHorizontalAlignment(SwingConstants.RIGHT);
-		label_6.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		label_6.setBounds(21, 270, 62, 14);
-		frame.getContentPane().add(label_6);
+      model.addColumn("Placa");
+      model.addColumn("Qtd Bilhetes");
 
-		textField_4 = new JTextField();
-		textField_4.setEditable(false);
-		textField_4.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField_4.setColumns(10);
-		textField_4.setBounds(93, 266, 433, 20);
-		frame.getContentPane().add(textField_4);
+      for (Veiculo v : lista) {
+        model.addRow(new Object[] { v.getPlaca(), v.getBilhetes().size() });
+      }
 
-		button = new JButton("ver Telefones");
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					String nome = textField_1.getText();
-					Pessoa p = Fachada.localizarPessoa(nome);
+      label_2.setText("resultados: " + lista.size() + " veículos - selecione uma linha para editar");
 
-					String telefones;
-					if (p.getTelefones().size() == 0)
-						telefones = "sem telefone";
-					else {
-						telefones = "";
-						for (Telefone t : p.getTelefones())
-							telefones = telefones + "\n" + t.getNumero();
-					}
-					JOptionPane.showMessageDialog(frame, telefones, "Telefones", JOptionPane.INFORMATION_MESSAGE);
-				} catch (Exception erro) {
-					label.setText(erro.getMessage());
-				}
-			}
-		});
-		button.setBounds(577, 266, 158, 23);
-		frame.getContentPane().add(button);
-
-		frame.setVisible(true);
-	}
-
-	public void listagem() {
-		try {
-			// objeto model contem todas as linhas e colunas da tabela
-			DefaultTableModel model = new DefaultTableModel();
-			table.setModel(model);
-
-			// adicionar as colunas (0,1,2) do grid
-			model.addColumn("Id");
-			model.addColumn("Nome");
-			model.addColumn("Nascimento");
-
-			// adicionar as linhas do grid
-			List<Pessoa> lista = Fachada.listarPessoas();
-			for (Pessoa p : lista)
-				model.addRow(new Object[] { p.getId(), p.getNome(), p.getDtNascimento() });
-
-			label_2.setText("resultados: " + lista.size() + " pessoas   - selecione uma linha para editar");
-		} catch (Exception erro) {
-			label.setText(erro.getMessage());
-		}
-	}
-
-	public void apagarPessoaSelecionada() {
-		try {
-			label.setText("");
-			textField_5.setText("");
-			String nome = textField_1.getText();
-
-			Object[] options = { "Confirmar", "Cancelar" };
-			int escolha = JOptionPane.showOptionDialog(null, "Esta opera��o apagar� a pessoa " + nome, "Alerta",
-					JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
-			if (escolha == 0) {
-				Fachada.apagarPessoa(nome);
-				label.setText("pessoa excluida");
-				listagem();
-			} else
-				label.setText("exclus�o cancelada");
-
-		} catch (Exception erro) {
-			label.setText(erro.getMessage());
-		}
-	}
-
-	public void criarPessoa() {
-		try {
-			label.setText("");
-			String nome = textField_1.getText().trim();
-			String nascimento = textField_2.getText().trim();
-			List<String> apelidos = Arrays.asList(textField_3.getText().trim().split(","));
-
-			Fachada.criarPessoa(nome, nascimento, apelidos);
-
-			String numero = textField_5.getText();
-			if (!numero.isEmpty())
-				Fachada.criarTelefone(nome, numero);
-			label.setText("pessoa criada");
-			listagem();
-
-		} catch (Exception ex) {
-			label.setText(ex.getMessage());
-		}
-	}
-
-	public void atualizarPessoaSelecionada() {
-		try {
-			label.setText("");
-			String nome = textField_1.getText();
-			String nascimento = textField_2.getText();
-			List<String> apelidos = new ArrayList(Arrays.asList(textField_3.getText().trim().split(",")));
-
-			Fachada.alterarPessoa(nome, nascimento, apelidos);
-
-			String numero = textField_5.getText();
-			if (!numero.isEmpty())
-				Fachada.criarTelefone(nome, numero);
-
-			label.setText("pessoa atualizada");
-			listagem();
-		} catch (Exception ex2) {
-			label.setText(ex2.getMessage());
-		}
-	}
+    } catch (Exception erro) {
+      label.setText(erro.getMessage());
+    }
+  }
 }

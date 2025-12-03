@@ -43,6 +43,7 @@ public class Fachada {
     veiculoRep.conectar();
     Veiculo p = veiculoRep.ler(placa);
     if (p != null) {
+      veiculoRep.desconectar();
       throw new Exception("criar veiculo - veiculo ja existe com placa :" + placa);
     }
     p = new Veiculo(placa);
@@ -89,6 +90,30 @@ public class Fachada {
     List<Veiculo> lista = veiculoRep.listar();
     veiculoRep.desconectar();
     return lista;
+  }
+
+  public static void alterarPlacaVeiculo(String placaAntiga, String placaNova) throws Exception {
+    veiculoRep.conectar();
+    
+    // Verifica se o veículo com a placa antiga existe
+    Veiculo v = veiculoRep.ler(placaAntiga);
+    if (v == null) {
+      veiculoRep.rollback();
+      throw new Exception("alterar placa - veiculo inexistente: " + placaAntiga);
+    }
+    
+    // Verifica se já existe um veículo com a nova placa
+    Veiculo existente = veiculoRep.ler(placaNova);
+    if (existente != null) {
+      veiculoRep.rollback();
+      throw new Exception("alterar placa - ja existe veiculo com placa: " + placaNova);
+    }
+    
+    // Atualiza a placa
+    v.setPlaca(placaNova);
+    veiculoRep.atualizar(v);
+    veiculoRep.commit();
+    veiculoRep.desconectar();
   }
 
   public static Estacionamento localizarEstacionamento(String nome) throws Exception {
@@ -166,7 +191,7 @@ public class Fachada {
     return p;
   }
 
-  public static void criarBilhete(String data, Double valorPago, Veiculo veiculo, Estacionamento estacionamento)
+  public static void criarBilhete(String data, Double valorPago, String placaVeiculo, String nomeEstacionamento)
       throws Exception {
     Date dataFormatada;
     try {
@@ -174,14 +199,39 @@ public class Fachada {
     } catch (Exception e) {
       throw new Exception("criar bilhete - erro ao parsear data (formato invalido): " + data);
     }
+    
     bilheteRep.conectar();
+    
+    // Buscar veículo e estacionamento DENTRO da mesma conexão
+    Veiculo veiculo = veiculoRep.ler(placaVeiculo);
+    if (veiculo == null) {
+      bilheteRep.rollback();
+      throw new Exception("criar bilhete - veiculo inexistente: " + placaVeiculo);
+    }
+    
+    Estacionamento estacionamento = estacionamentoRep.ler(nomeEstacionamento);
+    if (estacionamento == null) {
+      bilheteRep.rollback();
+      throw new Exception("criar bilhete - estacionamento inexistente: " + nomeEstacionamento);
+    }
+    
     Bilhete p = bilheteRep.lerBilhetePorVeiculoData(veiculo, dataFormatada);
     if (p != null) {
+      bilheteRep.rollback();
       throw new Exception(
           "criar bilhete - bilhete já existe ou existe um bilhete associado ao mesmo veiculo há menos de uma hora de diferença:"
-              + veiculo + ", " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(data));
+              + placaVeiculo + ", " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(dataFormatada));
     }
     p = new Bilhete(estacionamento, veiculo, dataFormatada, valorPago);
+    
+    // Adicionar bilhete às listas do veículo e estacionamento
+    veiculo.addBilhete(p);
+    estacionamento.addBilhete(p);
+    
+    // Atualizar veículo e estacionamento no banco
+    veiculoRep.atualizar(veiculo);
+    estacionamentoRep.atualizar(estacionamento);
+    
     bilheteRep.criar(p);
     bilheteRep.commit();
     bilheteRep.desconectar();
@@ -215,9 +265,8 @@ public class Fachada {
 
     veiculoRep.removeBilhete(p.getVeiculo(), p);
     estacionamentoRep.removeBilhete(p.getEstacionamento(), p);
-    bilheteRep.apagar(p); 
-
     bilheteRep.apagar(p);
+
     bilheteRep.commit();
     bilheteRep.desconectar();
   }
