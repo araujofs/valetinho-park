@@ -60,7 +60,7 @@ public class Cadastrar {
       Fachada.criarBilhete("01/12/2025 09:30:00", 12.5, "DEF-5678", "Shopping Center");
       System.out.println("Bilhete criado: DEF-5678 no Shopping Center");
       
-      Fachada.criarBilhete("01/12/2025 10:00:00", 8.0, "DEF-5678", "Aeroporto");
+      Fachada.criarBilhete("01/12/2025 10:33:00", 8.0, "DEF-5678", "Aeroporto");
       System.out.println("Bilhete criado: DEF-5678 no Aeroporto");
       
       Fachada.criarBilhete("30/11/2025 14:00:00", 20.0, "GHI-9012", "Centro");

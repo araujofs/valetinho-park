@@ -1,9 +1,3 @@
-/**
- * IFPB - Curso Superior de Tec. em Sist. para Internet
- * Persistencia de Objetos
- * Prof. Fausto Maranh�o Ayres
- */
-
 package appswing;
 
 import java.awt.Color;
@@ -121,7 +115,7 @@ public class TelaEstacionamento {
     table.setFillsViewportHeight(true);
     table.setRowSelectionAllowed(true);
     table.setFont(new Font("Tahoma", Font.PLAIN, 14));
-    scrollPane.setColumnHeaderView(table);
+    scrollPane.setViewportView(table);
     table.setBorder(new LineBorder(new Color(0, 0, 0)));
     table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     table.setShowGrid(true);

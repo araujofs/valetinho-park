@@ -1,9 +1,4 @@
 package appswing;
-/**********************************
- * IFPB - SI
- * POB - Persistencia de Objetos
- * Prof. Fausto Ayres
- **********************************/
 
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -26,9 +21,6 @@ public class TelaPrincipal {
 	private JMenu mnConsulta;
 	private JLabel label;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -42,16 +34,10 @@ public class TelaPrincipal {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public TelaPrincipal() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("Valetinho Park");

@@ -5,10 +5,6 @@ import modelo.Estacionamento;
 import modelo.Veiculo;
 import requisito.Fachada;
 
-/**
- * Classe para listar todos os dados do sistema via console.
- * Usa a Fachada para acessar os dados.
- */
 public class Listar {
 
   public Listar() {

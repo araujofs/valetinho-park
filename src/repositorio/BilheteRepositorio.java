@@ -34,12 +34,17 @@ public class BilheteRepositorio extends CRUDRepositorio<Bilhete>{
     Query q = Util.getManager().query();
     Calendar cal = Calendar.getInstance();
     cal.setTime(data);
-    cal.add(Calendar.HOUR_OF_DAY, -1);
 
+    cal.add(Calendar.HOUR_OF_DAY, -1);
     Date dataUmaHoraMenos = cal.getTime();
+
+    cal.add(Calendar.HOUR_OF_DAY, +2);
+    Date dataUmaHoraMais = cal.getTime();
+
     q.constrain(Bilhete.class);
     q.descend("veiculo").constrain(veiculo);
     q.descend("data").constrain(dataUmaHoraMenos).greater();
+    q.descend("data").constrain(dataUmaHoraMais).smaller();
 
     List<Bilhete> resultado = q.execute();
     if (resultado.size() > 0) {

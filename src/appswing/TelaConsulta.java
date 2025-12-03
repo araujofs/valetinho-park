@@ -56,17 +56,11 @@ public class TelaConsulta {
   // });
   // }
 
-  /**
-   * Create the application.
-   */
   public TelaConsulta() {
     initialize();
     frame.setVisible(true);
   }
 
-  /**
-   * Initialize the contents of the frame.
-   */
   private void initialize() {
     frame = new JDialog();
     frame.setModal(true);
@@ -100,7 +94,7 @@ public class TelaConsulta {
     table.setShowGrid(true);
     table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
-    label = new JLabel(""); // label de mensagem
+    label = new JLabel(""); 
     label.setForeground(Color.BLUE);
     label.setBounds(21, 321, 688, 14);
     frame.getContentPane().add(label);
@@ -185,28 +179,23 @@ public class TelaConsulta {
 
   public void listagemBilhete(List<Bilhete> lista) {
     try {
-      // objeto model contem todas as linhas e colunas da tabela
       DefaultTableModel model = new DefaultTableModel();
       table.setModel(model);
 
-      // criar as colunas (0,1,2) da tabela
       model.addColumn("Id");
       model.addColumn("Data");
       model.addColumn("Valor");
       model.addColumn("Placa_veiculo");
       model.addColumn("Nome_estacionamento");
 
-      // criar as linhas da tabela
       for (Bilhete p : lista) {
-        // adicionar linha no table
         model.addRow(new Object[] { p.getId(), p.getDataFormatada(), p.getValorpago(), p.getVeiculo().getPlaca(), p.getEstacionamento().getNome() });
       }
-      // redimensionar a coluna 0,3 e 4
-      table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // desabilita
-      table.getColumnModel().getColumn(0).setMaxWidth(40); // coluna id
-      table.getColumnModel().getColumn(3).setMinWidth(200); // coluna dos apelidos
-      table.getColumnModel().getColumn(4).setMinWidth(200); // coluna dos telefones
-      table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS); // desabilita
+      table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); 
+      table.getColumnModel().getColumn(0).setMaxWidth(40); 
+      table.getColumnModel().getColumn(3).setMinWidth(200); 
+      table.getColumnModel().getColumn(4).setMinWidth(200); 
+      table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS); 
 
     } catch (Exception erro) {
       label.setText(erro.getMessage());
@@ -214,15 +203,12 @@ public class TelaConsulta {
   }
   public void listagemVeiculo(List<Veiculo> lista) {
     try {
-      // objeto model contem todas as linhas e colunas da tabela
       DefaultTableModel model = new DefaultTableModel();
       table.setModel(model);
 
-      // criar as colunas (0,1,2) da tabela
       model.addColumn("Placa");
       model.addColumn("Bilhetes");
 
-      // criar as linhas da tabela
       String texto2;
       for (Veiculo p : lista) {
         if (p.getBilhetes().size() > 0) {
@@ -231,14 +217,12 @@ public class TelaConsulta {
             texto2 += t.getId() + " ";
         } else
           texto2 = "sem bilhetes";
-        // adicionar linha no table
         model.addRow(new Object[] { p.getPlaca(), texto2.trim() });
 
       }
-      // redimensionar as colunas
       table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-      table.getColumnModel().getColumn(0).setMinWidth(100); // coluna placa
-      table.getColumnModel().getColumn(1).setMinWidth(300); // coluna bilhetes
+      table.getColumnModel().getColumn(0).setMinWidth(100); 
+      table.getColumnModel().getColumn(1).setMinWidth(300); 
       table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
     } catch (Exception erro) {

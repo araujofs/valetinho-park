@@ -8,10 +8,6 @@ import modelo.Bilhete;
 import modelo.Veiculo;
 import requisito.Fachada;
 
-/**
- * Classe para demonstrar consultas especiais no sistema via console.
- * Usa a Fachada para acessar os métodos de consulta.
- */
 public class Consultar {
 
   public Consultar() {
@@ -24,7 +20,6 @@ public class Consultar {
       }
 
       System.out.println("\n========== CONSULTA 2: Veículos estacionados em uma data específica ==========");
-      // Usar a data de hoje
       Date hoje = new Date();
       String dataFormatada = new SimpleDateFormat("dd/MM/yyyy").format(hoje);
       System.out.println("Data da consulta: " + dataFormatada);

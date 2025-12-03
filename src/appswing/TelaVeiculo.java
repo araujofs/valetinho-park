@@ -1,8 +1,3 @@
-/**********************************
- * IFPB - SI
- * POB - Persistencia de Objetos
- * Prof. Fausto Ayres
- **********************************/
 package appswing;
 
 import java.awt.Color;
@@ -50,7 +45,7 @@ public class TelaVeiculo {
   private JTextField textField_2;
   private JTextField textField_3;
 
-  private String placaSelecionada = null; // guarda a placa original selecionada
+  private String placaSelecionada = null; 
 
   public TelaVeiculo() {
     initialize();
@@ -89,7 +84,7 @@ public class TelaVeiculo {
             String placa = (String) table.getValueAt(table.getSelectedRow(), 0);
             Veiculo v = Fachada.localizarVeiculo(placa);
             
-            placaSelecionada = placa; // guarda a placa original
+            placaSelecionada = placa; 
             textField_1.setText(placa);
             textField_2.setText("");
             

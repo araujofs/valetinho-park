@@ -2,12 +2,6 @@ package requisito;
 
 import java.text.SimpleDateFormat;
 
-/**********************************
- * IFPB - SI
- * POB - Persistencia de Objetos
- * Prof. Fausto Ayres
- **********************************/
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -81,21 +75,18 @@ public class Fachada {
   public static void alterarPlacaVeiculo(String placaAntiga, String placaNova) throws Exception {
     veiculoRep.conectar();
     
-    // Verifica se o veículo com a placa antiga existe
     Veiculo v = veiculoRep.ler(placaAntiga);
     if (v == null) {
       veiculoRep.rollback();
       throw new Exception("alterar placa - veiculo inexistente: " + placaAntiga);
     }
     
-    // Verifica se já existe um veículo com a nova placa
     Veiculo existente = veiculoRep.ler(placaNova);
     if (existente != null) {
       veiculoRep.rollback();
       throw new Exception("alterar placa - ja existe veiculo com placa: " + placaNova);
     }
     
-    // Atualiza a placa
     v.setPlaca(placaNova);
     veiculoRep.atualizar(v);
     veiculoRep.commit();
@@ -135,7 +126,6 @@ public class Fachada {
       throw new Exception("alterar estacionamento - estacionamento inexistente:" + id);
     }
 
-    // Não mexer na lista de bilhetes - ela é gerenciada por criarBilhete/apagarBilhete
     p.setLocalizacao(localizacao);
     p.setNome(nome);
 
@@ -191,7 +181,6 @@ public class Fachada {
     
     bilheteRep.conectar();
     
-    // Buscar veículo e estacionamento DENTRO da mesma conexão
     Veiculo veiculo = veiculoRep.ler(placaVeiculo);
     if (veiculo == null) {
       bilheteRep.rollback();
@@ -213,11 +202,9 @@ public class Fachada {
     }
     p = new Bilhete(estacionamento, veiculo, dataFormatada, valorPago);
     
-    // Adicionar bilhete às listas do veículo e estacionamento
     veiculo.addBilhete(p);
     estacionamento.addBilhete(p);
     
-    // Atualizar veículo e estacionamento no banco
     veiculoRep.atualizar(veiculo);
     estacionamentoRep.atualizar(estacionamento);
     

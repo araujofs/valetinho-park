@@ -1,9 +1,3 @@
-/**********************************
- * IFPB - SI
- * POB - Persistencia de Objetos
- * Prof. Fausto Ayres
- **********************************/
-
 package appswing;
 
 import java.awt.Color;
@@ -138,7 +132,6 @@ public class TelaBilhete {
     label_1.setBounds(21, 200, 350, 14);
     frame.getContentPane().add(label_1);
 
-    // Campo ID (somente leitura)
     JLabel label_id = new JLabel("id:");
     label_id.setHorizontalAlignment(SwingConstants.LEFT);
     label_id.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -153,7 +146,6 @@ public class TelaBilhete {
     textField_1.setToolTipText("ID gerado automaticamente (somente leitura)");
     frame.getContentPane().add(textField_1);
 
-    // Campo Data
     label_2 = new JLabel("data:");
     label_2.setHorizontalAlignment(SwingConstants.LEFT);
     label_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -171,7 +163,6 @@ public class TelaBilhete {
     label_formato.setBounds(280, 255, 150, 14);
     frame.getContentPane().add(label_formato);
 
-    // Campo Valor Pago
     label_3 = new JLabel("valor pago:");
     label_3.setHorizontalAlignment(SwingConstants.LEFT);
     label_3.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -184,7 +175,6 @@ public class TelaBilhete {
     textField_3.setToolTipText("Ex: 15.50");
     frame.getContentPane().add(textField_3);
 
-    // Campo Placa Veículo
     label_4 = new JLabel("placa veículo:");
     label_4.setHorizontalAlignment(SwingConstants.LEFT);
     label_4.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -197,7 +187,6 @@ public class TelaBilhete {
     textField_4.setToolTipText("Placa de um veículo existente (Ex: ABC-1234)");
     frame.getContentPane().add(textField_4);
 
-    // Campo Estacionamento
     label_5 = new JLabel("estacionamento:");
     label_5.setHorizontalAlignment(SwingConstants.LEFT);
     label_5.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -210,7 +199,6 @@ public class TelaBilhete {
     textField_5.setToolTipText("Nome de um estacionamento existente (Ex: Shopping)");
     frame.getContentPane().add(textField_5);
 
-    // Botão Criar
     button_1 = new JButton("Criar");
     button_1.setToolTipText("criar novo bilhete");
     button_1.addActionListener(new ActionListener() {
@@ -250,7 +238,6 @@ public class TelaBilhete {
     button_1.setBounds(21, 350, 80, 23);
     frame.getContentPane().add(button_1);
 
-    // Botão Apagar
     button_2 = new JButton("Apagar");
     button_2.setToolTipText("apagar bilhete selecionado");
     button_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -282,7 +269,6 @@ public class TelaBilhete {
     button_2.setBounds(110, 350, 80, 23);
     frame.getContentPane().add(button_2);
 
-    // Botão Limpar
     button_3 = new JButton("Limpar");
     button_3.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
