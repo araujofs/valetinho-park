@@ -114,39 +114,61 @@ public class TelaConsulta {
     button.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         int index = comboBox.getSelectedIndex();
-        if (index < 0)
+        if (index < 0) {
           label_4.setText("consulta nao selecionada");
-        else {
+        } else {
           label_4.setText("");
-          switch (index) {
-            case 0:
-              String valor = JOptionPane.showInputDialog("digite o valor");
-              List<Bilhete> resultado1 = Fachada.consultarBilhetesValorMaiorX(Double.valueOf(valor));
-              listagemBilhete(resultado1);
-              break;
-            case 1:
-              String data = JOptionPane.showInputDialog("digite a data (dd/MM/yyyy HH:mm:ss)");
-              Date dataParseada;
-
-              try {
-                dataParseada = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(data);
-              } catch (Exception err) {
-                label.setText(err.getMessage());
+          label.setText("");
+          try {
+            switch (index) {
+              case 0:
+                String valor = JOptionPane.showInputDialog("digite o valor");
+                if (valor == null || valor.isEmpty()) {
+                  label.setText("valor cancelado ou vazio");
+                  return;
+                }
+                List<Bilhete> resultado1 = Fachada.consultarBilhetesValorMaiorX(Double.valueOf(valor));
+                listagemBilhete(resultado1);
+                label_4.setText("resultados: " + resultado1.size() + " bilhete(s)");
                 break;
-              }
-              String estacionamentoNome = JOptionPane.showInputDialog("digite o nome do estacionamento");
-              List<Veiculo> resultado2 = Fachada.consultarVeiculoEstacionadoDataX(dataParseada, estacionamentoNome);
-              listagemVeiculo(resultado2);
-              break;
-            case 2:
-              String n = JOptionPane.showInputDialog("digite N");
-              List<Veiculo> resultado3 = Fachada.consultarVeiculoMaisXBilhetes(Integer.valueOf(n));
-              listagemVeiculo(resultado3);
-              break;
-
+              case 1:
+                String data = JOptionPane.showInputDialog("digite a data (dd/MM/yyyy)");
+                if (data == null || data.isEmpty()) {
+                  label.setText("data cancelada ou vazia");
+                  return;
+                }
+                Date dataParseada;
+                try {
+                  dataParseada = new SimpleDateFormat("dd/MM/yyyy").parse(data);
+                } catch (Exception err) {
+                  label.setText("erro no formato da data: " + err.getMessage());
+                  return;
+                }
+                String estacionamentoNome = JOptionPane.showInputDialog("digite o nome do estacionamento");
+                if (estacionamentoNome == null || estacionamentoNome.isEmpty()) {
+                  label.setText("estacionamento cancelado ou vazio");
+                  return;
+                }
+                List<Veiculo> resultado2 = Fachada.consultarVeiculoEstacionadoDataX(dataParseada, estacionamentoNome);
+                listagemVeiculo(resultado2);
+                label_4.setText("resultados: " + resultado2.size() + " veiculo(s)");
+                break;
+              case 2:
+                String n = JOptionPane.showInputDialog("digite N (quantidade minima de bilhetes)");
+                if (n == null || n.isEmpty()) {
+                  label.setText("valor cancelado ou vazio");
+                  return;
+                }
+                List<Veiculo> resultado3 = Fachada.consultarVeiculoMaisXBilhetes(Integer.valueOf(n));
+                listagemVeiculo(resultado3);
+                label_4.setText("resultados: " + resultado3.size() + " veiculo(s)");
+                break;
+            }
+          } catch (Exception ex) {
+            label.setText("ERRO: " + ex.getMessage());
+            ex.printStackTrace();
           }
         }
-
       }
     });
     button.setBounds(606, 10, 89, 23);

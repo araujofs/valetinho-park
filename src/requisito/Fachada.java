@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
  * Prof. Fausto Ayres
  **********************************/
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -274,22 +275,21 @@ public class Fachada {
 
   public static List<Bilhete> consultarBilhetesValorMaiorX(Double x) {
     bilheteRep.conectar();
-    List<Bilhete> bilhetes = bilheteRep.lerBilheteMaiorValorPago(x);
+    List<Bilhete> bilhetes = new ArrayList<>(bilheteRep.lerBilheteMaiorValorPago(x));
     bilheteRep.desconectar();
     return bilhetes;
   }
 
   public static List<Veiculo> consultarVeiculoEstacionadoDataX(Date x, String nomeEstacionamento) {
     veiculoRep.conectar();
-    List<Veiculo> veiculos = veiculoRep.lerVeiculoEstacionadoData(nomeEstacionamento, Fachada.inicioDoDia(x), Fachada.fimDoDia(x));
+    List<Veiculo> veiculos = new ArrayList<>(veiculoRep.lerVeiculoEstacionadoData(nomeEstacionamento, Fachada.inicioDoDia(x), Fachada.fimDoDia(x)));
     veiculoRep.desconectar();
     return veiculos;
   }
 
   public static List<Veiculo> consultarVeiculoMaisXBilhetes(Integer x) {
     veiculoRep.conectar();
-
-    List<Veiculo> veiculos = veiculoRep.lerVeiculoMaisBilhetes(x);
+    List<Veiculo> veiculos = new ArrayList<>(veiculoRep.lerVeiculoMaisBilhetes(x));
     veiculoRep.desconectar();
     return veiculos;
   }

@@ -38,9 +38,9 @@ public class VeiculoRepositorio extends CRUDRepositorio<Veiculo> {
     Query query = Util.getManager().query();
 
     query.constrain(Veiculo.class);
-    query.descend("listaBilhete").descend("estacionamento").descend("nome").constrain(estacionamentoNome);
-    query.descend("listaBilhete").descend("data").constrain(inicioDia).greater();
-    query.descend("listaBilhete").descend("data").constrain(fimDia).smaller();
+    query.descend("bilhetes").descend("estacionamento").descend("nome").constrain(estacionamentoNome);
+    query.descend("bilhetes").descend("data").constrain(inicioDia).greater();
+    query.descend("bilhetes").descend("data").constrain(fimDia).smaller();
 
     return query.execute();
   }
