@@ -1,8 +1,8 @@
-/**
- * IFPB - Curso Superior de Tec. em Sist. para Internet
- * Persistencia de Objetos
- * Prof. Fausto Maranh�o Ayres
- */
+/**********************************
+ * IFPB - SI
+ * POB - Persistencia de Objetos
+ * Prof. Fausto Ayres
+ **********************************/
 
 package appswing;
 
