@@ -1,5 +1,8 @@
-package main.java.modelo;
+package br.com.valetinho.modelo;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public class Localizacao {
   private Double x;
   private Double y;

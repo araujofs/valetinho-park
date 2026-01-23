@@ -1,29 +1,51 @@
-package main.java.modelo;
+package br.com.valetinho.modelo;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+@Table(name = "estacionamento_20241370031")
+@Entity
 public class Estacionamento implements Identificavel {
+
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
-  private ArrayList<Bilhete> bilhetes = new ArrayList<>();
+
+  @OneToMany(mappedBy = "estacionamento", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Bilhete> bilhetes = new ArrayList<>();
+
+  @Embedded
   private Localizacao localizacao;
-  private String nome;  
+
+  private String nome;
 
   public Estacionamento(Localizacao localizacao, String nome) {
     this.localizacao = localizacao;
     this.nome = nome;
   }
 
-  public void addBilhete(Bilhete bilhete) throws Exception {
-    if (!bilhete.getEstacionamento().equals(this))
-      throw new Exception("Bilhete não pertence a esse estacionamento");
+  public void addBilhete(Bilhete bilhete) {
+    bilhete.setEstacionamento(this);
     this.bilhetes.add(bilhete);
+  }
+
+  public void removeBilhete(Bilhete bilhete) {
+    bilhete.setEstacionamento(null);
+    this.bilhetes.remove(bilhete);
   }
 
   public Integer getId() {
     return id;
   }
 
-  public ArrayList<Bilhete> getBilhetes() {
+  public List<Bilhete> getBilhetes() {
     return bilhetes;
   }
 

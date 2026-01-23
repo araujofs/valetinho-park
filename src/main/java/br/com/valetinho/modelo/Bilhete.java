@@ -1,14 +1,30 @@
-package main.java.modelo;
+package br.com.valetinho.modelo;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Table(name = "bilhete_20241370031")
+@Entity
 public class Bilhete implements Identificavel {
-  private Estacionamento estacionamento;
-  private Veiculo veiculo;
-  private Date data;
-  private Double valorpago;
+
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
+
+  private Date data;
+
+  private Double valorpago;
+
+  @ManyToOne(optional = false)
+  private Estacionamento estacionamento;
+
+  @ManyToOne(optional = false)
+  private Veiculo veiculo;
   
   public Bilhete(Estacionamento estacionamento, Veiculo veiculo, Date data, Double valorpago) {
     this.data = data;
