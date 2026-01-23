@@ -1,53 +1,40 @@
-package repositorio;
+package br.com.valetinho.repositorio;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
-import com.db4o.query.Query;
-
-import main.java.modelo.Bilhete;
-import main.java.modelo.Veiculo;
-import util.Util;
+import br.com.valetinho.modelo.Veiculo;
+import br.com.valetinho.util.Util;
+import jakarta.persistence.TypedQuery;
 
 public class VeiculoRepositorio extends CRUDRepositorio<Veiculo> {
 
+  @Override
   public Veiculo ler(Object chave) {
-    String placa = (String) chave;
-    Query q = Util.getManager().query();
-    q.constrain(Veiculo.class);
-    q.descend("placa").constrain(placa);
-    List<Veiculo> resultado = q.execute();
-    if (resultado.size() > 0)
-      return resultado.getFirst();
-    else
-      return null;
+    TypedQuery<Veiculo> query = Util.getManager().createQuery("SELECT v FROM Veiculo v WHERE v.placa = :chave",
+        Veiculo.class);
+    query.setParameter("placa", chave);
+    return query.getSingleResult();
   }
 
-  public void removeBilhete(Veiculo veiculo, Bilhete bilhete) {
-    veiculo.getBilhetes().remove(bilhete);
-
-    this.atualizar(veiculo);
+  @Override
+  public List<Veiculo> listar() {
+    return Util.getManager().createQuery("SELECT v FROM Veiculo v", Veiculo.class).getResultList();
   }
 
-  public List<Veiculo> lerVeiculoEstacionadoData(String estacionamentoNome, Date inicioDia, Date fimDia) {
-    Query query = Util.getManager().query();
-
-    query.constrain(Veiculo.class);
-    query.descend("bilhetes").descend("estacionamento").descend("nome").constrain(estacionamentoNome);
-    query.descend("bilhetes").descend("data").constrain(inicioDia).greater();
-    query.descend("bilhetes").descend("data").constrain(fimDia).smaller();
-
-    return query.execute();
+  public List<Veiculo> lerVeiculoEstacionadoData(String estacionamentoNome, LocalDate data) {
+    TypedQuery<Veiculo> query = Util.getManager().createQuery(
+        "SELECT DISTINCT v FROM Veiculo v JOIN v.bilhetes b WHERE b.data = :data AND b.estacionamento.nome = :nome",
+        Veiculo.class);
+    query.setParameter("nome", estacionamentoNome);
+    query.setParameter("data", data);
+    return query.getResultList();
   }
 
   public List<Veiculo> lerVeiculoMaisBilhetes(Integer quantidadeBilhetes) {
-    Query query = Util.getManager().query();
-
-    query.constrain(Veiculo.class);
-    query.constrain(new Filtro(quantidadeBilhetes));
-
-    return query.execute();
+    TypedQuery<Veiculo> query = Util.getManager().createQuery("SELECT v FROM Veiculo v WHERE SIZE(v.bilhetes) > :qtd",
+        Veiculo.class);
+    query.setParameter("qtd", quantidadeBilhetes);
+    return query.getResultList();
   }
-
-
 }

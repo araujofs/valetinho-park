@@ -1,7 +1,8 @@
 package br.com.valetinho.modelo;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +17,9 @@ public class Bilhete implements Identificavel {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
-  private Date data;
+  private LocalDate data;
+
+  private LocalTime hora;
 
   private Double valorpago;
 
@@ -25,15 +28,15 @@ public class Bilhete implements Identificavel {
 
   @ManyToOne(optional = false)
   private Veiculo veiculo;
-  
-  public Bilhete(Estacionamento estacionamento, Veiculo veiculo, Date data, Double valorpago) {
+
+  public Bilhete(Estacionamento estacionamento, Veiculo veiculo, LocalDate data, Double valorpago) {
     this.data = data;
     this.estacionamento = estacionamento;
     this.veiculo = veiculo;
     this.valorpago = valorpago;
   }
 
-  public void setData(Date data) {
+  public void setData(LocalDate data) {
     this.data = data;
   }
 
@@ -57,7 +60,7 @@ public class Bilhete implements Identificavel {
     this.estacionamento = est;
   }
 
-  public Date getData() {
+  public LocalDate getData() {
     return data;
   }
 
@@ -73,9 +76,18 @@ public class Bilhete implements Identificavel {
     return id;
   }
 
+  public LocalTime getHora() {
+    return hora;
+  }
+
+  public void setHora(LocalTime hora) {
+    this.hora = hora;
+  }
+
   @Override
   public String toString() {
-    return "[id=" + id + ", data=" + getDataFormatada() + ", valorpago=" + valorpago + ", estacionamentoID=" + estacionamento.getId() + ", veiculoPlaca=" + veiculo.getPlaca() + "]";
+    return "[id=" + id + ", data=" + getDataFormatada() + ", valorpago=" + valorpago + ", estacionamentoID="
+        + estacionamento.getId() + ", veiculoPlaca=" + veiculo.getPlaca() + "]";
   }
 
   @Override

@@ -1,41 +1,31 @@
-package repositorio;
+package br.com.valetinho.repositorio;
 
 import java.util.List;
 
-import com.db4o.query.Query;
+import br.com.valetinho.modelo.Estacionamento;
+import br.com.valetinho.util.Util;
+import jakarta.persistence.TypedQuery;
 
-import main.java.modelo.Bilhete;
-import main.java.modelo.Estacionamento;
-import util.Util;
+public class EstacionamentoRepositorio extends CRUDRepositorio<Estacionamento> {
 
-public class EstacionamentoRepositorio extends CRUDRepositorio<Estacionamento>{
-
+  @Override
   public Estacionamento ler(Object chave) {
-    String nome = (String) chave;
-    Query q = Util.getManager().query();
-    q.constrain(Estacionamento.class);
-    q.descend("nome").constrain(nome);
-    List<Estacionamento> resultado = q.execute();
-    if (resultado.size() > 0)
-      return resultado.getFirst();
-    else
-      return null;
+    TypedQuery<Estacionamento> query = Util.getManager().createQuery(
+        "SELECT e FROM Estacionamento e WHERE e.nome = :chave",
+        Estacionamento.class);
+    query.setParameter("chave", chave);
+    return query.getSingleResult();
+  }
+
+  @Override
+  public List<Estacionamento> listar() {
+    return Util.getManager().createQuery("SELECT e FROM Estacionamento e", Estacionamento.class).getResultList();
   }
 
   public Estacionamento ler(Integer id) {
-    Query q = Util.getManager().query();
-    q.constrain(Estacionamento.class);
-    q.descend("id").constrain(id);
-    List<Estacionamento> resultado = q.execute();
-    if (resultado.size() > 0)
-      return resultado.getFirst();
-    else
-      return null;
-  }
-  
-  public void removeBilhete(Estacionamento estacionamento, Bilhete bilhete) {
-    estacionamento.getBilhetes().remove(bilhete);
-
-    this.atualizar(estacionamento);
+    TypedQuery<Estacionamento> query = Util.getManager().createQuery("SELECT e FROM Estacionamento e WHERE e.id = :id",
+        Estacionamento.class);
+    query.setParameter("id", id);
+    return query.getSingleResult();
   }
 }

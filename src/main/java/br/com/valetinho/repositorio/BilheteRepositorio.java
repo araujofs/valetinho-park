@@ -3,63 +3,48 @@
  * POO
  * Prof. Fausto Maranh�o Ayres
  **********************************/
-package repositorio;
+package br.com.valetinho.repositorio;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
-import com.db4o.query.Query;
+import br.com.valetinho.modelo.Bilhete;
+import br.com.valetinho.modelo.Veiculo;
+import br.com.valetinho.util.Util;
+import jakarta.persistence.TypedQuery;
 
-import main.java.modelo.Bilhete;
-import main.java.modelo.Veiculo;
-import util.Util;
+public class BilheteRepositorio extends CRUDRepositorio<Bilhete> {
 
-public class BilheteRepositorio extends CRUDRepositorio<Bilhete>{
-
+  @Override
   public Bilhete ler(Object chave) {
-    Integer id = (Integer) chave;
-    Query q = Util.getManager().query();
-    q.constrain(Bilhete.class);
-    q.descend("id").constrain(id);
-    
-    List<Bilhete> resultado = q.execute();
-    if (resultado.size() > 0)
-      return resultado.getFirst();
-    else
-      return null;
+    TypedQuery<Bilhete> query = Util.getManager().createQuery("SELECT b FROM Bilhete b WHERE b.id = :chave",
+        Bilhete.class);
+    query.setParameter("chave", chave);
+    return query.getSingleResult();
   }
 
-  public Bilhete lerBilhetePorVeiculoData(Veiculo veiculo, Date data) {
-    Query q = Util.getManager().query();
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(data);
+  @Override
+  public List<Bilhete> listar() {
+    return Util.getManager().createQuery("SELECT b FROM Bilhete b", Bilhete.class).getResultList();
+  }
 
-    cal.add(Calendar.HOUR_OF_DAY, -1);
-    Date dataUmaHoraMenos = cal.getTime();
+  public List<Bilhete> lerBilhetePorVeiculoData(Veiculo veiculo, LocalDate data) {
+    TypedQuery<Bilhete> query = Util.getManager().createQuery("SELECT b FROM Bilhete b WHERE b.veiculo = :veiculo AND b.data = :data",
+        Bilhete.class);
 
-    cal.add(Calendar.HOUR_OF_DAY, +2);
-    Date dataUmaHoraMais = cal.getTime();
+    query.setParameter("veiculo", veiculo);
+    query.setParameter("data", data);
 
-    q.constrain(Bilhete.class);
-    q.descend("veiculo").constrain(veiculo);
-    q.descend("data").constrain(dataUmaHoraMenos).greater();
-    q.descend("data").constrain(dataUmaHoraMais).smaller();
-
-    List<Bilhete> resultado = q.execute();
-    if (resultado.size() > 0) {
-      return resultado.getFirst();
-    }
-
-    return null;
+    return query.getResultList();
   }
 
   public List<Bilhete> lerBilheteMaiorValorPago(Double valorpago) {
-    Query query = Util.getManager().query();
+    TypedQuery<Bilhete> query = Util.getManager().createQuery("SELECT b FROM Bilhete b WHERE b.valorpago = :valorpago",
+        Bilhete.class);
 
-    query.constrain(Bilhete.class);
-    query.descend("valorpago").constrain(valorpago).greater();
+    query.setParameter("valorpago", valorpago);
 
-    return query.execute();
+    return query.getResultList();
   }
+
 }
