@@ -6,6 +6,7 @@
 package br.com.valetinho.repositorio;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import br.com.valetinho.modelo.Bilhete;
@@ -28,12 +29,13 @@ public class BilheteRepositorio extends CRUDRepositorio<Bilhete> {
     return Util.getManager().createQuery("SELECT b FROM Bilhete b", Bilhete.class).getResultList();
   }
 
-  public List<Bilhete> lerBilhetePorVeiculoData(Veiculo veiculo, LocalDate data) {
-    TypedQuery<Bilhete> query = Util.getManager().createQuery("SELECT b FROM Bilhete b WHERE b.veiculo = :veiculo AND b.data = :data",
+  public List<Bilhete> lerBilhetePorVeiculoDataHora(Veiculo veiculo, LocalDate data, LocalTime hora) {
+    TypedQuery<Bilhete> query = Util.getManager().createQuery("SELECT b FROM Bilhete b WHERE b.veiculo = :veiculo AND b.data >= :data AND b.hora > :hora",
         Bilhete.class);
 
     query.setParameter("veiculo", veiculo);
     query.setParameter("data", data);
+    query.setParameter("hora", hora);
 
     return query.getResultList();
   }
