@@ -1,19 +1,16 @@
-package requisito;
+package br.com.valetinho.requisito;
 
-import java.text.SimpleDateFormat;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
-import main.java.modelo.Bilhete;
-import main.java.modelo.Estacionamento;
-import main.java.modelo.Localizacao;
-import main.java.modelo.Veiculo;
-import repositorio.EstacionamentoRepositorio;
-import repositorio.VeiculoRepositorio;
-import repositorio.BilheteRepositorio;
+import br.com.valetinho.modelo.Bilhete;
+import br.com.valetinho.modelo.Estacionamento;
+import br.com.valetinho.modelo.Localizacao;
+import br.com.valetinho.modelo.Veiculo;
+import br.com.valetinho.repositorio.BilheteRepositorio;
+import br.com.valetinho.repositorio.EstacionamentoRepositorio;
+import br.com.valetinho.repositorio.VeiculoRepositorio;
 
 public class Fachada {
   private Fachada() {
@@ -23,235 +20,328 @@ public class Fachada {
   private static EstacionamentoRepositorio estacionamentoRep = new EstacionamentoRepositorio();
   private static BilheteRepositorio bilheteRep = new BilheteRepositorio();
 
-  public static Veiculo localizarVeiculo(String placa) throws Exception {
+  public static Veiculo localizarVeiculo(String placa) {
     veiculoRep.conectar();
-    Veiculo p = veiculoRep.ler(placa);
-    if (p == null) {
+
+    try {
+      Veiculo p = veiculoRep.ler(placa);
+
+      if (p == null)
+        throw new RuntimeException("Veículo com placa \"" + placa + "\" não existe!");
+
+      return p;
+    } catch (Exception e) {
+      throw e;
+    } finally {
       veiculoRep.desconectar();
-      throw new Exception("veiculo inexistente: " + placa);
     }
-    veiculoRep.desconectar();
-    return p;
   }
 
-  public static void criarVeiculo(String placa) throws Exception {
+  public static void criarVeiculo(String placa) {
     veiculoRep.conectar();
-    Veiculo p = veiculoRep.ler(placa);
-    if (p != null) {
-      veiculoRep.desconectar();
-      throw new Exception("criar veiculo - veiculo ja existe com placa :" + placa);
-    }
-    p = new Veiculo(placa);
-    veiculoRep.criar(p);
-    veiculoRep.commit();
-    veiculoRep.desconectar();
-  }
 
-  public static void apagarVeiculo(String nome) throws Exception {
-    veiculoRep.conectar();
-    Veiculo p = veiculoRep.ler(nome);
-    if (p == null) {
+    try {
+      veiculoRep.begin();
+
+      Veiculo veiculo = new Veiculo(placa);
+      veiculoRep.criar(veiculo);
+      veiculoRep.commit();
+    } catch (Exception e) {
       veiculoRep.rollback();
-      throw new Exception("excluir veiculo - veiculo inexistente:" + nome);
+      throw e;
+    } finally {
+      veiculoRep.desconectar();
     }
+  }
 
-    for (Bilhete t : p.getBilhetes()) {
-      estacionamentoRep.removeBilhete(t.getEstacionamento(), t);
-      bilheteRep.apagar(t); // deletar o bilhete orfao
+  public static void apagarVeiculo(String placa) {
+    veiculoRep.conectar();
+
+    try {
+      veiculoRep.begin();
+
+      Veiculo veiculo = veiculoRep.ler(placa);
+
+      if (veiculo == null)
+        throw new RuntimeException("Veículo com placa \"" + placa + "\" não existe, impossível apagar!");
+
+      List<Bilhete> bilhetes = veiculo.getBilhetes();
+
+      for (Bilhete bilhete : bilhetes) {
+        bilhete.getEstacionamento().removeBilhete(bilhete);
+      }
+
+      veiculoRep.apagar(veiculo);
+      veiculoRep.commit();
+    } catch (Exception e) {
+      veiculoRep.rollback();
+      throw e;
+    } finally {
+      veiculoRep.desconectar();
     }
-
-    veiculoRep.apagar(p); // apagar a veiculo
-    veiculoRep.commit();
-    veiculoRep.desconectar();
   }
 
   public static List<Veiculo> listarVeiculos() {
     veiculoRep.conectar();
-    List<Veiculo> lista = veiculoRep.listar();
-    veiculoRep.desconectar();
-    return lista;
+
+    try {
+      List<Veiculo> p = veiculoRep.listar();
+
+      return p;
+    } catch (Exception e) {
+      throw new RuntimeException("Erro ao buscar por veículos!");
+    } finally {
+      veiculoRep.desconectar();
+    }
   }
 
-  public static void alterarPlacaVeiculo(String placaAntiga, String placaNova) throws Exception {
+  public static void alterarPlacaVeiculo(String placaAntiga, String placaNova) {
     veiculoRep.conectar();
-    
-    Veiculo v = veiculoRep.ler(placaAntiga);
-    if (v == null) {
+
+    try {
+      veiculoRep.begin();
+
+      Veiculo v = veiculoRep.ler(placaAntiga);
+
+      if (v == null) {
+        throw new RuntimeException("Veículo com placa \"" + placaAntiga + "\" não existe!");
+      }
+
+      v.setPlaca(placaNova);
+      veiculoRep.atualizar(v);
+      veiculoRep.commit();
+    } catch (Exception e) {
       veiculoRep.rollback();
-      throw new Exception("alterar placa - veiculo inexistente: " + placaAntiga);
+      throw e;
+    } finally {
+      veiculoRep.desconectar();
     }
-    
-    Veiculo existente = veiculoRep.ler(placaNova);
-    if (existente != null) {
-      veiculoRep.rollback();
-      throw new Exception("alterar placa - ja existe veiculo com placa: " + placaNova);
-    }
-    
-    v.setPlaca(placaNova);
-    veiculoRep.atualizar(v);
-    veiculoRep.commit();
-    veiculoRep.desconectar();
   }
 
-  public static Estacionamento localizarEstacionamento(String nome) throws Exception {
+  public static Estacionamento localizarEstacionamento(String nome) {
     estacionamentoRep.conectar();
-    Estacionamento p = estacionamentoRep.ler(nome);
-    if (p == null) {
+
+    try {
+      Estacionamento e = estacionamentoRep.ler(nome);
+
+      if (e == null)
+        throw new RuntimeException("Estacionamento com nome \"" + nome + "\" não existe!");
+
+      return e;
+    } catch (Exception e) {
+      throw e;
+    } finally {
       estacionamentoRep.desconectar();
-      throw new Exception("estacionamento inexistente: " + nome);
     }
-    estacionamentoRep.desconectar();
-    return p;
   }
 
-  public static void criarEstacionamento(String nome, Localizacao localizacao) throws Exception {
+  public static void criarEstacionamento(String nome, Localizacao localizacao) {
     estacionamentoRep.conectar();
-    Estacionamento p = estacionamentoRep.ler(nome);
-    if (p != null) {
+
+    try {
+      estacionamentoRep.begin();
+
+      Estacionamento estacionamento = new Estacionamento(localizacao, nome);
+      estacionamentoRep.criar(estacionamento);
+      estacionamentoRep.commit();
+    } catch (Exception e) {
+      estacionamentoRep.rollback();
+      throw e;
+    } finally {
       estacionamentoRep.desconectar();
-      throw new Exception("criar estacionamento - estacionamento ja existe com nome: " + nome);
     }
-    p = new Estacionamento(localizacao, nome);
-    estacionamentoRep.criar(p);
-    estacionamentoRep.commit();
-    estacionamentoRep.desconectar();
   }
 
   public static void alterarEstacionamento(Integer id, String nome, Localizacao localizacao)
-      throws Exception {
+      {
     estacionamentoRep.conectar();
-    Estacionamento p = estacionamentoRep.ler(id);
-    if (p == null) {
+
+    try {
+      estacionamentoRep.begin();
+
+      Estacionamento e = estacionamentoRep.ler(id);
+
+      if (e == null) {
+        throw new RuntimeException("Estacionamento com id \"" + id + "\" não existe!");
+      }
+
+      e.setNome(nome);
+      e.setLocalizacao(localizacao);
+
+      estacionamentoRep.atualizar(e);
+      estacionamentoRep.commit();
+    } catch (Exception e) {
       estacionamentoRep.rollback();
-      throw new Exception("alterar estacionamento - estacionamento inexistente:" + id);
+      throw e;
+    } finally {
+      estacionamentoRep.desconectar();
     }
-
-    p.setLocalizacao(localizacao);
-    p.setNome(nome);
-
-    estacionamentoRep.atualizar(p);
-    estacionamentoRep.commit();
-    estacionamentoRep.desconectar();
   }
 
-  public static void apagarEstacionamento(String nome) throws Exception {
+  public static void apagarEstacionamento(String nome) {
     estacionamentoRep.conectar();
-    Estacionamento p = estacionamentoRep.ler(nome);
-    if (p == null) {
+
+    try {
+      estacionamentoRep.begin();
+
+      Estacionamento estacionamento = estacionamentoRep.ler(nome);
+
+      if (estacionamento == null)
+        throw new RuntimeException("Estacionamento com nome \"" + nome + "\" não existe, impossível apagar!");
+
+      List<Bilhete> bilhetes = estacionamento.getBilhetes();
+
+      for (Bilhete bilhete : bilhetes) {
+        bilhete.getVeiculo().removeBilhete(bilhete);
+      }
+
+      estacionamentoRep.apagar(estacionamento);
+      estacionamentoRep.commit();
+    } catch (Exception e) {
       estacionamentoRep.rollback();
-      throw new Exception("excluir veiculo - veiculo inexistente:" + nome);
+      throw e;
+    } finally {
+      estacionamentoRep.desconectar();
     }
-
-    for (Bilhete t : p.getBilhetes()) {
-      veiculoRep.removeBilhete(t.getVeiculo(), t);
-      bilheteRep.apagar(t); // deletar o bilhete orfao
-    }
-
-    estacionamentoRep.apagar(p); // apagar a veiculo
-    estacionamentoRep.commit();
-    estacionamentoRep.desconectar();
   }
 
   public static List<Estacionamento> listarEstacionamento() {
     estacionamentoRep.conectar();
-    List<Estacionamento> lista = estacionamentoRep.listar();
-    estacionamentoRep.desconectar();
-    return lista;
-  }
 
-  public static Bilhete localizarBilhete(Integer id) throws Exception {
-    bilheteRep.conectar();
-    Bilhete p = bilheteRep.ler(id);
-    if (p == null) {
-      bilheteRep.desconectar();
-      throw new Exception("bilhete inexistente: " + id);
-    }
-    bilheteRep.desconectar();
-    return p;
-  }
-
-  public static void criarBilhete(String data, Double valorPago, String placaVeiculo, String nomeEstacionamento)
-      throws Exception {
-    Date dataFormatada;
     try {
-      dataFormatada = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(data);
+      List<Estacionamento> e = estacionamentoRep.listar();
+
+      return e;
     } catch (Exception e) {
-      throw new Exception("criar bilhete - erro ao parsear data (formato invalido): " + data);
+      throw new RuntimeException("Erro ao buscar por estacionamentos!");
+    } finally {
+      estacionamentoRep.desconectar();
     }
-    
-    bilheteRep.conectar();
-    
-    Veiculo veiculo = veiculoRep.ler(placaVeiculo);
-    if (veiculo == null) {
-      bilheteRep.rollback();
-      throw new Exception("criar bilhete - veiculo inexistente: " + placaVeiculo);
-    }
-    
-    Estacionamento estacionamento = estacionamentoRep.ler(nomeEstacionamento);
-    if (estacionamento == null) {
-      bilheteRep.rollback();
-      throw new Exception("criar bilhete - estacionamento inexistente: " + nomeEstacionamento);
-    }
-    
-    Bilhete p = bilheteRep.lerBilhetePorVeiculoData(veiculo, dataFormatada);
-    if (p != null) {
-      bilheteRep.rollback();
-      throw new Exception(
-          "criar bilhete - bilhete já existe ou existe um bilhete associado ao mesmo veiculo há menos de uma hora de diferença:"
-              + placaVeiculo + ", " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(dataFormatada));
-    }
-    p = new Bilhete(estacionamento, veiculo, dataFormatada, valorPago);
-    
-    veiculo.addBilhete(p);
-    estacionamento.addBilhete(p);
-    
-    veiculoRep.atualizar(veiculo);
-    estacionamentoRep.atualizar(estacionamento);
-    
-    bilheteRep.criar(p);
-    bilheteRep.commit();
-    bilheteRep.desconectar();
   }
 
-  public static void alterarBilhete(Integer id, Date data, Double valorPago, Veiculo veiculo,
-      Estacionamento estacionamento) throws Exception {
+  public static Bilhete localizarBilhete(Integer id) {
     bilheteRep.conectar();
-    Bilhete p = bilheteRep.ler(id);
-    if (p == null) {
-      throw new Exception("alterar bilhete - bilhete inexistente:" + id);
+
+    try {
+      Bilhete e = bilheteRep.ler(id);
+
+      if (e == null)
+        return null;
+
+      return e;
+    } catch (Exception e) {
+      throw new RuntimeException("Bilhete com id \"" + id + "\" não existe!");
+    } finally {
+      bilheteRep.desconectar();
     }
-
-    p.setVeiculo(veiculo);
-    p.setEstacionamento(estacionamento);
-    p.setData(data);
-    p.setValorpago(valorPago);
-
-    bilheteRep.atualizar(p);
-    bilheteRep.commit();
-    bilheteRep.desconectar();
   }
 
-  public static void apagarBilhete(Integer id) throws Exception {
+  public static void criarBilhete(LocalDate data, LocalTime hora, Double valorPago, String placaVeiculo,
+      String nomeEstacionamento)
+      {
     bilheteRep.conectar();
-    Bilhete p = bilheteRep.ler(id);
-    if (p == null) {
+
+    try {
+      bilheteRep.begin();
+
+      Veiculo veiculo = veiculoRep.ler(placaVeiculo);
+      if (veiculo == null) {
+        throw new RuntimeException("Erro na criação do bilhete -> Veiculo com placa \"" + placaVeiculo + "\" não existe!");
+      }
+
+      Estacionamento estacionamento = estacionamentoRep.ler(nomeEstacionamento);
+      if (estacionamento == null) {
+        bilheteRep.rollback();
+        throw new RuntimeException(
+            "Erro na criação do bilhete -> Estacionamento com nome \"" + nomeEstacionamento + "\" não existe!");
+      }
+
+      List<Bilhete> p = bilheteRep.lerBilhetePorVeiculoDataHora(veiculo, data, hora);
+      if (p != null && p.size() > 0) {
+        throw new RuntimeException("Bilhete não pode ser criado antes de bilhetes mais recentes!");
+      }
+
+      Bilhete b = new Bilhete(estacionamento, veiculo, data, hora, valorPago);
+
+      veiculo.addBilhete(b);
+      estacionamento.addBilhete(b);
+
+      bilheteRep.criar(b);
+
+      bilheteRep.commit();
+    } catch (Exception e) {
       bilheteRep.rollback();
-      throw new Exception("excluir bilhete - bilhete inexistente:" + id);
+      throw e;
+    } finally {
+      bilheteRep.desconectar();
     }
 
-    veiculoRep.removeBilhete(p.getVeiculo(), p);
-    estacionamentoRep.removeBilhete(p.getEstacionamento(), p);
-    bilheteRep.apagar(p);
+  }
 
-    bilheteRep.commit();
-    bilheteRep.desconectar();
+  // Não faz sentido poder alterar bilhete
+  // public static void alterarBilhete(Integer id, LocalDate data, LocalTime hora,
+  // Double valorPago, Veiculo veiculo,
+  // Estacionamento estacionamento) {
+  // bilheteRep.conectar();
+
+  // try {
+  // Bilhete p = bilheteRep.ler(id);
+  // if (p == null) {
+  // throw new RuntimeException("alterar bilhete - bilhete inexistente:" + id);
+  // }
+
+  // p.setVeiculo(veiculo);
+  // p.setEstacionamento(estacionamento);
+  // p.setData(data);
+  // p.setValorpago(valorPago);
+
+  // bilheteRep.atualizar(p);
+  // bilheteRep.commit();
+  // bilheteRep.desconectar();
+
+  // } catch (Exception e) {
+  // bilheteRep.rollback();
+  // throw e;
+  // }
+  // }
+
+  public static void apagarBilhete(Integer id) {
+    bilheteRep.conectar();
+
+    try {
+      bilheteRep.begin();
+      Bilhete p = bilheteRep.ler(id);
+
+      if (p == null) {
+        throw new RuntimeException("Bilhete com id: " + id + " não existe, impossível deletar");
+      }
+
+      p.getVeiculo().removeBilhete(p);
+      p.getEstacionamento().removeBilhete(p);
+
+      bilheteRep.apagar(p);
+      bilheteRep.commit();
+    } catch (Exception e) {
+      bilheteRep.rollback();
+      throw e;
+    } finally {
+      bilheteRep.desconectar();
+    }
+
   }
 
   public static List<Bilhete> listarBilhete() {
     bilheteRep.conectar();
-    List<Bilhete> lista = bilheteRep.listar();
-    bilheteRep.desconectar();
-    return lista;
+    try {
+      List<Bilhete> bilhetes = bilheteRep.listar();
+
+      return bilhetes;
+    } catch (Exception e) {
+      throw new RuntimeException("Erro ao buscar por bilhetes!");
+    } finally {
+      bilheteRep.desconectar();
+
+    }
   }
 
   /**********************************************************
@@ -262,43 +352,23 @@ public class Fachada {
 
   public static List<Bilhete> consultarBilhetesValorMaiorX(Double x) {
     bilheteRep.conectar();
-    List<Bilhete> bilhetes = new ArrayList<>(bilheteRep.lerBilheteMaiorValorPago(x));
+
+    List<Bilhete> bilhetes = bilheteRep.lerBilheteMaiorValorPago(x);
     bilheteRep.desconectar();
     return bilhetes;
   }
 
-  public static List<Veiculo> consultarVeiculoEstacionadoDataX(Date x, String nomeEstacionamento) {
+  public static List<Veiculo> consultarVeiculoEstacionadoDataX(LocalDate x, String nomeEstacionamento) {
     veiculoRep.conectar();
-    List<Veiculo> veiculos = new ArrayList<>(veiculoRep.lerVeiculoEstacionadoData(nomeEstacionamento, Fachada.inicioDoDia(x), Fachada.fimDoDia(x)));
+    List<Veiculo> veiculos = veiculoRep.lerVeiculoEstacionadoData(nomeEstacionamento, x);
     veiculoRep.desconectar();
     return veiculos;
   }
 
   public static List<Veiculo> consultarVeiculoMaisXBilhetes(Integer x) {
     veiculoRep.conectar();
-    List<Veiculo> veiculos = new ArrayList<>(veiculoRep.lerVeiculoMaisBilhetes(x));
+    List<Veiculo> veiculos = veiculoRep.lerVeiculoMaisBilhetes(x);
     veiculoRep.desconectar();
     return veiculos;
   }
-
-  private static Date inicioDoDia(Date d) {
-    Calendar c = Calendar.getInstance();
-    c.setTime(d);
-    c.set(Calendar.HOUR_OF_DAY, 0);
-    c.set(Calendar.MINUTE, 0);
-    c.set(Calendar.SECOND, 0);
-    c.set(Calendar.MILLISECOND, 0);
-    return c.getTime();
-  }
-
-  private static Date fimDoDia(Date d) {
-    Calendar c = Calendar.getInstance();
-    c.setTime(d);
-    c.set(Calendar.HOUR_OF_DAY, 23);
-    c.set(Calendar.MINUTE, 59);
-    c.set(Calendar.SECOND, 59);
-    c.set(Calendar.MILLISECOND, 999);
-    return c.getTime();
-  }
-  
 }
