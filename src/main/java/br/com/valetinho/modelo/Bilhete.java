@@ -7,6 +7,8 @@ import java.time.LocalTime;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -14,6 +16,7 @@ import jakarta.persistence.Table;
 @Entity
 public class Bilhete implements Identificavel {
 
+  @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
@@ -24,13 +27,16 @@ public class Bilhete implements Identificavel {
   private Double valorpago;
 
   @ManyToOne(optional = false)
+  @JoinColumn(name = "estacionamento_id", nullable = false)
   private Estacionamento estacionamento;
 
   @ManyToOne(optional = false)
+  @JoinColumn(name = "veiculo_id", nullable = false)
   private Veiculo veiculo;
 
-  public Bilhete(Estacionamento estacionamento, Veiculo veiculo, LocalDate data, Double valorpago) {
+  public Bilhete(Estacionamento estacionamento, Veiculo veiculo, LocalDate data, LocalTime hora, Double valorpago) {
     this.data = data;
+    this.hora = hora;
     this.estacionamento = estacionamento;
     this.veiculo = veiculo;
     this.valorpago = valorpago;

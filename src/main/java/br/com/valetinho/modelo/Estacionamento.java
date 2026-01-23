@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -15,6 +17,7 @@ import jakarta.persistence.Table;
 @Entity
 public class Estacionamento implements Identificavel {
 
+  @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
@@ -24,6 +27,7 @@ public class Estacionamento implements Identificavel {
   @Embedded
   private Localizacao localizacao;
 
+  @Column(unique = true)
   private String nome;
 
   public Estacionamento(Localizacao localizacao, String nome) {

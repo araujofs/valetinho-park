@@ -3,9 +3,11 @@ package br.com.valetinho.modelo;
 import java.util.ArrayList;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -13,9 +15,11 @@ import jakarta.persistence.Table;
 @Entity
 public class Veiculo {
 
+  @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
+  @Column(unique = true)
   private String placa;
 
   @OneToMany(mappedBy = "veiculo", cascade = CascadeType.ALL, orphanRemoval = true)
