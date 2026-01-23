@@ -1,128 +1,45 @@
-package util;
+package br.com.valetinho.util;
+
 /**********************************
  * IFPB - Curso Superior de Sistemas para Internet
  * Persistência de Objetos
  * Prof. Fausto Maranhão Ayres
  **********************************/
 
-import java.util.Properties;
-
-import javax.swing.JOptionPane;
-
-import com.db4o.Db4oEmbedded;
-import com.db4o.ObjectContainer;
-import com.db4o.config.EmbeddedConfiguration;
-import com.db4o.cs.Db4oClientServer;
-import com.db4o.cs.config.ClientConfiguration;
-
-import main.java.modelo.Bilhete;
-import main.java.modelo.Estacionamento;
-import main.java.modelo.Veiculo;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 
 public class Util {
-	private static ObjectContainer manager;
-	private static String ipservidor;
+  private static EntityManagerFactory factory;
+  private static EntityManager manager;
 
-	public static void conectarBanco() {
-		try {
-			//obter o ip do servidor ou localhost do arquivo de propriedades			
-			Properties props = new Properties();
-			props.load(Util.class.getResourceAsStream("/util/ip.properties"));//carrega o arquivo de propriedades
-			ipservidor = props.getProperty("ipatual");
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null,	"ip incorreto=" + ipservidor + "\n" + e.getMessage());
-			System.exit(0);
-		}
-		//abrir conexao com o banco
-		if(ipservidor.equals("localhost"))
-			conectarBancoLocal(); // banco local (pasta do projeto)
-		else
-			conectarBancoRemoto(); // banco remoto (precisa de um servidor ativo)
-		
-		// ativar controle de IDs automáticos
-		ControleID.ativar(manager); // ativa geração de IDs automáticos para as classes com atributo "int id"
-	}
+  public static void conectarBanco() {
+    getManager();
+  }
 
-	private static void  conectarBancoLocal() {
-		if (manager != null)
-			return ; // ja tem uma conexao
+  public static EntityManager getManager() {
+    if (manager != null && manager.isOpen())
+      return manager;
 
-		// ---------------------------------------------------------------
-		// configurar, criar e abrir banco local (pasta do projeto)
-		// ---------------------------------------------------------------
-		EmbeddedConfiguration config = Db4oEmbedded.newConfiguration();
-		config.common().messageLevel(0); // mensagens na tela 0(desliga),1,2,3...
-		
-		// habilitar cascata na alteração, remoção e leitura
-		config.common().objectClass(Veiculo.class).cascadeOnDelete(false);
-		config.common().objectClass(Veiculo.class).cascadeOnUpdate(true);
-		config.common().objectClass(Veiculo.class).cascadeOnActivate(true);
-		config.common().objectClass(Estacionamento.class).cascadeOnDelete(false);
-		config.common().objectClass(Estacionamento.class).cascadeOnUpdate(true);
-		config.common().objectClass(Estacionamento.class).cascadeOnActivate(true);
-		config.common().objectClass(Bilhete.class).cascadeOnDelete(false);
-		config.common().objectClass(Bilhete.class).cascadeOnUpdate(true);
-		config.common().objectClass(Bilhete.class).cascadeOnActivate(true);
+    if (factory == null) {
+      factory = Persistence.createEntityManagerFactory("hibernate-postgresql");
+    }
 
-		// conexao local
-		//-------------- 
-		try {
-			manager = Db4oEmbedded.openFile(config, "banco.db4o");
-			//System.out.println("conectado ao banco " + ipservidor);
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null,
-					"Erro ao conectar ao banco local \n" + e.getMessage());
-			System.exit(0);
-		}
-	}
+    manager = factory.createEntityManager();
 
-	private static void conectarBancoRemoto() {
-		if (manager != null)
-			return ; // ja tem uma conexao
+    return manager;
+  }
 
-		// ---------------------------------------
-		// configurar e conectar banco remoto
-		// ---------------------------------------
-		ClientConfiguration config = Db4oClientServer.newClientConfiguration();
-		config.common().messageLevel(0); // 0,1,2,3...
-		
-		// habilitar cascata na alteração, remoção e leitura
-		config.common().objectClass(Veiculo.class).cascadeOnDelete(false);
-		config.common().objectClass(Veiculo.class).cascadeOnUpdate(true);
-		config.common().objectClass(Veiculo.class).cascadeOnActivate(true);
-		config.common().objectClass(Estacionamento.class).cascadeOnDelete(false);
-		config.common().objectClass(Estacionamento.class).cascadeOnUpdate(true);
-		config.common().objectClass(Estacionamento.class).cascadeOnActivate(true);
-		config.common().objectClass(Bilhete.class).cascadeOnDelete(false);
-		config.common().objectClass(Bilhete.class).cascadeOnUpdate(true);
-		config.common().objectClass(Bilhete.class).cascadeOnActivate(true);
+  public static void desconectar() {
+    if (manager != null && manager.isOpen()) {
+      manager.close();
+      manager = null;
+    }
 
-		// **************************************
-		// Conexão client-server
-		// **************************************
-		try {
-			manager = Db4oClientServer.openClient(config, ipservidor, 34000, "usuario1", "senha1");
-			//System.out.println("conectado ao banco " + manager);
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null,
-					"Erro ao conectar ao banco remoto ip=" + ipservidor + "\n" + e.getMessage());
-			System.exit(0);
-		}
-	}
-
-	public static void desconectar() {
-		if (manager != null) {
-			manager.close();
-			manager = null;
-		}
-	}
-	
-	public static ObjectContainer getManager() {
-		return manager;
-	}
-
-	public static String getIPservidor() {
-		return ipservidor;
-	}
-
-}// fim da classe Util
+    if (factory != null && factory.isOpen()) {
+      factory.close();
+      factory = null;
+    }
+  }
+}

@@ -1,4 +1,4 @@
-<persistence-unit name="hibernate-posgresql">
+<persistence-unit name="hibernate-postgresql">
   <description></description>
   <provider></provider>
   <exclude-unlisted-classes></exclude-unlisted-classes>
