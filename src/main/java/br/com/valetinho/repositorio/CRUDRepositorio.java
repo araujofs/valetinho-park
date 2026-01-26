@@ -47,13 +47,13 @@ public abstract class CRUDRepositorio<T> {
   }
 
   public void commit() {
-    if (!Util.getManager().getTransaction().isActive()) {
+    if (Util.getManager().getTransaction().isActive()) {
       Util.getManager().getTransaction().commit();
     }
   }
 
   public void rollback() {
-    if (!Util.getManager().getTransaction().isActive()) {
+    if (Util.getManager().getTransaction().isActive()) {
       Util.getManager().getTransaction().rollback();
     }
   }

@@ -12,16 +12,21 @@ import java.util.List;
 import br.com.valetinho.modelo.Bilhete;
 import br.com.valetinho.modelo.Veiculo;
 import br.com.valetinho.util.Util;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
 public class BilheteRepositorio extends CRUDRepositorio<Bilhete> {
 
   @Override
   public Bilhete ler(Object chave) {
-    TypedQuery<Bilhete> query = Util.getManager().createQuery("SELECT b FROM Bilhete b WHERE b.id = :chave",
-        Bilhete.class);
-    query.setParameter("chave", chave);
-    return query.getSingleResult();
+    try {
+      TypedQuery<Bilhete> query = Util.getManager().createQuery("SELECT b FROM Bilhete b WHERE b.id = :chave",
+          Bilhete.class);
+      query.setParameter("chave", chave);
+      return query.getSingleResult();
+    } catch (NoResultException e) {
+      return null;
+    }
   }
 
   @Override
@@ -41,7 +46,7 @@ public class BilheteRepositorio extends CRUDRepositorio<Bilhete> {
   }
 
   public List<Bilhete> lerBilheteMaiorValorPago(Double valorpago) {
-    TypedQuery<Bilhete> query = Util.getManager().createQuery("SELECT b FROM Bilhete b WHERE b.valorpago = :valorpago",
+    TypedQuery<Bilhete> query = Util.getManager().createQuery("SELECT b FROM Bilhete b WHERE b.valorpago > :valorpago",
         Bilhete.class);
 
     query.setParameter("valorpago", valorpago);

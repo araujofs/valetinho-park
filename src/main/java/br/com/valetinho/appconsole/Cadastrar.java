@@ -2,7 +2,6 @@ package br.com.valetinho.appconsole;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 import br.com.valetinho.modelo.Localizacao;
 import br.com.valetinho.requisito.Fachada;

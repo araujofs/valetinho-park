@@ -7,6 +7,9 @@ public class Localizacao {
   private Double x;
   private Double y;
 
+  public Localizacao() {
+  }
+
   public Localizacao(Double x, Double y) {
     this.x = x;
     this.y = y;

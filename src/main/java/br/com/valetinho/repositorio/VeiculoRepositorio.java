@@ -5,16 +5,21 @@ import java.util.List;
 
 import br.com.valetinho.modelo.Veiculo;
 import br.com.valetinho.util.Util;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 
 public class VeiculoRepositorio extends CRUDRepositorio<Veiculo> {
 
   @Override
   public Veiculo ler(Object chave) {
-    TypedQuery<Veiculo> query = Util.getManager().createQuery("SELECT v FROM Veiculo v WHERE v.placa = :chave",
-        Veiculo.class);
-    query.setParameter("placa", chave);
-    return query.getSingleResult();
+    try {
+      TypedQuery<Veiculo> query = Util.getManager().createQuery("SELECT v FROM Veiculo v WHERE v.placa = :chave",
+          Veiculo.class);
+      query.setParameter("chave", chave);
+      return query.getSingleResult();
+    } catch (NoResultException e) {
+      return null;
+    }
   }
 
   @Override

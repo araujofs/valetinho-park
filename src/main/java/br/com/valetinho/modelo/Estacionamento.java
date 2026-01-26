@@ -7,6 +7,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,7 +22,7 @@ public class Estacionamento implements Identificavel {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
-  @OneToMany(mappedBy = "estacionamento", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "estacionamento", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
   private List<Bilhete> bilhetes = new ArrayList<>();
 
   @Embedded
@@ -56,7 +57,7 @@ public class Estacionamento implements Identificavel {
     return bilhetes;
   }
 
-  public void setBilhetes(ArrayList<Bilhete> bilhetes) {
+  public void setBilhetes(List<Bilhete> bilhetes) {
     this.bilhetes = bilhetes;
   }
 

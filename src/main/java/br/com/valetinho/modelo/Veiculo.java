@@ -1,17 +1,19 @@
 package br.com.valetinho.modelo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-@Table(name = "estacionamento_20241370031")
+@Table(name = "veiculo_20241370031")
 @Entity
 public class Veiculo {
 
@@ -22,8 +24,8 @@ public class Veiculo {
   @Column(unique = true)
   private String placa;
 
-  @OneToMany(mappedBy = "veiculo", cascade = CascadeType.ALL, orphanRemoval = true)
-  private ArrayList<Bilhete> bilhetes = new ArrayList<>();
+  @OneToMany(mappedBy = "veiculo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+  private List<Bilhete> bilhetes = new ArrayList<>();
 
   public Veiculo() {
   }
@@ -42,7 +44,7 @@ public class Veiculo {
     this.bilhetes.remove(bilhete);
   }
 
-  public void setBilhetes(ArrayList<Bilhete> bilhetes) {
+  public void setBilhetes(List<Bilhete> bilhetes) {
     this.bilhetes = bilhetes;
   }
 
@@ -54,7 +56,7 @@ public class Veiculo {
     this.placa = placa;
   }
 
-  public ArrayList<Bilhete> getBilhetes() {
+  public List<Bilhete> getBilhetes() {
     return bilhetes;
   }
 
