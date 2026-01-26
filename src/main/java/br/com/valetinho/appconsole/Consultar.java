@@ -1,12 +1,11 @@
-package appconsole;
+package br.com.valetinho.appconsole;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
-import main.java.modelo.Bilhete;
-import main.java.modelo.Veiculo;
-import requisito.Fachada;
+import br.com.valetinho.modelo.Bilhete;
+import br.com.valetinho.modelo.Veiculo;
+import br.com.valetinho.requisito.Fachada;
 
 public class Consultar {
 
@@ -20,12 +19,11 @@ public class Consultar {
       }
 
       System.out.println("\n========== CONSULTA 2: Veículos estacionados em uma data específica ==========");
-      Date hoje = new Date();
-      String dataFormatada = new SimpleDateFormat("dd/MM/yyyy").format(hoje);
-      System.out.println("Data da consulta: " + dataFormatada);
+      LocalDate dataConsulta = LocalDate.of(2025, 12, 1);
+      System.out.println("Data da consulta: " + dataConsulta);
       System.out.println("Estacionamento: Shopping Center");
       
-      List<Veiculo> veiculosEstacionados = Fachada.consultarVeiculoEstacionadoDataX(hoje, "Shopping Center");
+      List<Veiculo> veiculosEstacionados = Fachada.consultarVeiculoEstacionadoDataX(dataConsulta, "Shopping Center");
       System.out.println("Encontrados " + veiculosEstacionados.size() + " veículo(s):");
       for (Veiculo v : veiculosEstacionados) {
         System.out.println("   " + v);

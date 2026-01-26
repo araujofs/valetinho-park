@@ -1,4 +1,4 @@
-package appswing;
+package br.com.valetinho.appswing;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -23,9 +23,9 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
-import main.java.modelo.Bilhete;
-import main.java.modelo.Veiculo;
-import requisito.Fachada;
+import br.com.valetinho.modelo.Bilhete;
+import br.com.valetinho.modelo.Veiculo;
+import br.com.valetinho.requisito.Fachada;
 
 public class TelaVeiculo {
   private JDialog frame;

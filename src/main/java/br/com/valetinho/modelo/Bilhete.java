@@ -1,6 +1,5 @@
 package br.com.valetinho.modelo;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -33,6 +32,9 @@ public class Bilhete implements Identificavel {
   @ManyToOne(optional = false)
   @JoinColumn(name = "veiculo_id", nullable = false)
   private Veiculo veiculo;
+
+  public Bilhete() {
+  }
 
   public Bilhete(Estacionamento estacionamento, Veiculo veiculo, LocalDate data, LocalTime hora, Double valorpago) {
     this.data = data;
@@ -71,7 +73,8 @@ public class Bilhete implements Identificavel {
   }
 
   public String getDataFormatada() {
-    return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(this.data);
+    return data.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) + " " 
+         + hora.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss"));
   }
 
   public Double getValorpago() {

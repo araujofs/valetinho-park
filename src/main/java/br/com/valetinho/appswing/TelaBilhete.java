@@ -1,4 +1,4 @@
-package appswing;
+package br.com.valetinho.appswing;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -8,6 +8,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -23,8 +26,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
-import main.java.modelo.Bilhete;
-import requisito.Fachada;
+import br.com.valetinho.modelo.Bilhete;
+import br.com.valetinho.requisito.Fachada;
 
 public class TelaBilhete {
   private JDialog frame;
@@ -221,12 +224,19 @@ public class TelaBilhete {
             return;
           }
 
-          String data = textField_2.getText().trim();
+          String dataHoraStr = textField_2.getText().trim();
+          DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+          
+          // Parse para LocalDateTime e depois separa data e hora
+          java.time.LocalDateTime dataHora = java.time.LocalDateTime.parse(dataHoraStr, formatter);
+          LocalDate data = dataHora.toLocalDate();
+          LocalTime hora = dataHora.toLocalTime();
+          
           Double valor = Double.parseDouble(textField_3.getText().trim());
           String placa = textField_4.getText().trim();
           String nomeEstac = textField_5.getText().trim();
 
-          Fachada.criarBilhete(data, valor, placa, nomeEstac);
+          Fachada.criarBilhete(data, hora, valor, placa, nomeEstac);
           label.setText("bilhete criado");
           listagem();
         } catch (Exception ex) {

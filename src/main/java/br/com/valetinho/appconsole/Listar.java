@@ -1,9 +1,9 @@
-package appconsole;
+package br.com.valetinho.appconsole;
 
-import main.java.modelo.Bilhete;
-import main.java.modelo.Estacionamento;
-import main.java.modelo.Veiculo;
-import requisito.Fachada;
+import br.com.valetinho.modelo.Bilhete;
+import br.com.valetinho.modelo.Estacionamento;
+import br.com.valetinho.modelo.Veiculo;
+import br.com.valetinho.requisito.Fachada;
 
 public class Listar {
 

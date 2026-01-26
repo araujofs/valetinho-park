@@ -1,17 +1,11 @@
-/**********************************
- * IFPB - Curso Superior de Tec. em Sist. para Internet
- * POB - Persistencia de Objetos
- * Prof. Fausto Ayres
- *
- */
-package appswing;
+package br.com.valetinho.appswing;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -27,9 +21,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
-import main.java.modelo.Bilhete;
-import main.java.modelo.Veiculo;
-import requisito.Fachada;
+import br.com.valetinho.modelo.Bilhete;
+import br.com.valetinho.modelo.Veiculo;
+import br.com.valetinho.requisito.Fachada;
 
 public class TelaConsulta {
   private JDialog frame;
@@ -131,9 +125,10 @@ public class TelaConsulta {
                   label.setText("data cancelada ou vazia");
                   return;
                 }
-                Date dataParseada;
+                LocalDate dataParseada;
                 try {
-                  dataParseada = new SimpleDateFormat("dd/MM/yyyy").parse(data);
+                  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                  dataParseada = LocalDate.parse(data, formatter);
                 } catch (Exception err) {
                   label.setText("erro no formato da data: " + err.getMessage());
                   return;

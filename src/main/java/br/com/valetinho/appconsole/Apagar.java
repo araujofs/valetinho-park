@@ -1,9 +1,12 @@
-package appconsole;
+package br.com.valetinho.appconsole;
 
-import main.java.modelo.Bilhete;
-import main.java.modelo.Estacionamento;
-import main.java.modelo.Veiculo;
-import requisito.Fachada;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+import br.com.valetinho.modelo.Bilhete;
+import br.com.valetinho.modelo.Estacionamento;
+import br.com.valetinho.modelo.Veiculo;
+import br.com.valetinho.requisito.Fachada;
 
 public class Apagar {
 
@@ -46,7 +49,7 @@ public class Apagar {
       Fachada.criarVeiculo("TEMP-0000");
       
       System.out.println("Criando bilhete para o veículo temporário...");
-      Fachada.criarBilhete("02/12/2025 18:00:00", 5.0, "TEMP-0000", "Centro");
+      Fachada.criarBilhete(LocalDate.of(2025, 12, 2), LocalTime.of(18, 0), 5.0, "TEMP-0000", "Centro");
       
       v = Fachada.localizarVeiculo("TEMP-0000");
       System.out.println("Veículo TEMP-0000 tem " + v.getBilhetes().size() + " bilhete(s)");

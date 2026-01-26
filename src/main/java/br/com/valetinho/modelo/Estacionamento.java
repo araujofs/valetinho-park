@@ -30,6 +30,9 @@ public class Estacionamento implements Identificavel {
   @Column(unique = true)
   private String nome;
 
+  public Estacionamento() {
+  }
+
   public Estacionamento(Localizacao localizacao, String nome) {
     this.localizacao = localizacao;
     this.nome = nome;

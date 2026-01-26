@@ -1,7 +1,11 @@
-package appconsole;
+package br.com.valetinho.appconsole;
 
-import main.java.modelo.Localizacao;
-import requisito.Fachada;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
+import br.com.valetinho.modelo.Localizacao;
+import br.com.valetinho.requisito.Fachada;
 
 /**
  * Classe para cadastrar dados de exemplo no sistema via console.
@@ -54,40 +58,40 @@ public class Cadastrar {
       System.out.println("\n========== CADASTRANDO BILHETES ==========");
       
       // Bilhetes para diferentes veículos em diferentes estacionamentos
-      Fachada.criarBilhete("01/12/2025 08:00:00", 10.0, "ABC-1234", "Shopping Center");
+      Fachada.criarBilhete(LocalDate.of(2025, 12, 1), LocalTime.of(8, 0), 10.0, "ABC-1234", "Shopping Center");
       System.out.println("Bilhete criado: ABC-1234 no Shopping Center");
       
-      Fachada.criarBilhete("01/12/2025 09:30:00", 12.5, "DEF-5678", "Shopping Center");
+      Fachada.criarBilhete(LocalDate.of(2025, 12, 1), LocalTime.of(9, 30), 12.5, "DEF-5678", "Shopping Center");
       System.out.println("Bilhete criado: DEF-5678 no Shopping Center");
       
-      Fachada.criarBilhete("01/12/2025 10:33:00", 8.0, "DEF-5678", "Aeroporto");
+      Fachada.criarBilhete(LocalDate.of(2025, 12, 1), LocalTime.of(10, 33), 8.0, "DEF-5678", "Aeroporto");
       System.out.println("Bilhete criado: DEF-5678 no Aeroporto");
       
-      Fachada.criarBilhete("30/11/2025 14:00:00", 20.0, "GHI-9012", "Centro");
+      Fachada.criarBilhete(LocalDate.of(2025, 11, 30), LocalTime.of(14, 0), 20.0, "GHI-9012", "Centro");
       System.out.println("Bilhete criado: GHI-9012 no Centro");
       
-      Fachada.criarBilhete("30/11/2025 16:00:00", 5.0, "ABC-1234", "Aeroporto");
+      Fachada.criarBilhete(LocalDate.of(2025, 11, 30), LocalTime.of(16, 0), 5.0, "ABC-1234", "Aeroporto");
       System.out.println("Bilhete criado: ABC-1234 no Aeroporto");
       
-      Fachada.criarBilhete("29/11/2025 11:00:00", 7.5, "JKL-3456", "Praia");
+      Fachada.criarBilhete(LocalDate.of(2025, 11, 29), LocalTime.of(11, 0), 7.5, "JKL-3456", "Praia");
       System.out.println("Bilhete criado: JKL-3456 na Praia");
       
-      Fachada.criarBilhete("28/11/2025 09:00:00", 15.0, "MNO-7890", "Hospital");
+      Fachada.criarBilhete(LocalDate.of(2025, 11, 28), LocalTime.of(9, 0), 15.0, "MNO-7890", "Hospital");
       System.out.println("Bilhete criado: MNO-7890 no Hospital");
       
-      Fachada.criarBilhete("27/11/2025 13:00:00", 3.0, "PQR-1122", "Universidade");
+      Fachada.criarBilhete(LocalDate.of(2025, 11, 27), LocalTime.of(13, 0), 3.0, "PQR-1122", "Universidade");
       System.out.println("Bilhete criado: PQR-1122 na Universidade");
       
-      Fachada.criarBilhete("02/12/2025 08:00:00", 6.0, "JKL-3456", "Praia");
+      Fachada.criarBilhete(LocalDate.of(2025, 12, 2), LocalTime.of(8, 0), 6.0, "JKL-3456", "Praia");
       System.out.println("Bilhete criado: JKL-3456 na Praia");
       
-      Fachada.criarBilhete("02/12/2025 10:00:00", 9.0, "MNO-7890", "Hospital");
+      Fachada.criarBilhete(LocalDate.of(2025, 12, 2), LocalTime.of(10, 0), 9.0, "MNO-7890", "Hospital");
       System.out.println("Bilhete criado: MNO-7890 no Hospital");
       
-      Fachada.criarBilhete("02/12/2025 11:00:00", 11.0, "PQR-1122", "Universidade");
+      Fachada.criarBilhete(LocalDate.of(2025, 12, 2), LocalTime.of(11, 0), 11.0, "PQR-1122", "Universidade");
       System.out.println("Bilhete criado: PQR-1122 na Universidade");
       
-      Fachada.criarBilhete("02/12/2025 14:00:00", 18.0, "GHI-9012", "Centro");
+      Fachada.criarBilhete(LocalDate.of(2025, 12, 2), LocalTime.of(14, 0), 18.0, "GHI-9012", "Centro");
       System.out.println("Bilhete criado: GHI-9012 no Centro");
 
       System.out.println("\n========== CADASTRO CONCLUÍDO ==========");

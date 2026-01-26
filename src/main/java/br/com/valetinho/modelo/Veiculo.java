@@ -25,6 +25,9 @@ public class Veiculo {
   @OneToMany(mappedBy = "veiculo", cascade = CascadeType.ALL, orphanRemoval = true)
   private ArrayList<Bilhete> bilhetes = new ArrayList<>();
 
+  public Veiculo() {
+  }
+
   public Veiculo(String placa) {
     this.placa = placa;
   }

@@ -1,4 +1,4 @@
-package appswing;
+package br.com.valetinho.appswing;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -23,10 +23,10 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
-import main.java.modelo.Bilhete;
-import main.java.modelo.Estacionamento;
-import main.java.modelo.Localizacao;
-import requisito.Fachada;
+import br.com.valetinho.modelo.Bilhete;
+import br.com.valetinho.modelo.Estacionamento;
+import br.com.valetinho.modelo.Localizacao;
+import br.com.valetinho.requisito.Fachada;
 
 public class TelaEstacionamento {
   private JDialog frame;

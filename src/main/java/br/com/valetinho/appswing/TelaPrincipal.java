@@ -1,4 +1,4 @@
-package appswing;
+package br.com.valetinho.appswing;
 
 import java.awt.EventQueue;
 import java.awt.Font;
