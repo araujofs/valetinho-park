@@ -15,7 +15,7 @@ public class Filtro implements Evaluation {
   public void evaluate(Candidate candidate) {
     Veiculo veic = (Veiculo) candidate.getObject();
     
-    if (veic.getListaBilhete().size() > quantidade) {
+    if (veic.getBilhetes().size() > quantidade) {
       candidate.include(true);
     } else {
       candidate.include(false);

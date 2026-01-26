@@ -1,27 +1,48 @@
 package appconsole;
 
-import repositorio.Repositorio;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import modelo.Bilhete;
+import modelo.Veiculo;
+import requisito.Fachada;
 
 public class Consultar {
 
   public Consultar() {
     try {
-      // bilhetes com valorpago > 10 reais
-      System.out.println("--------- bilhetes com valor pago > 10");
-      System.out.println(Repositorio.lerBilheteMaiorValorPago(10.0));
-      System.out.println();
+      System.out.println("========== CONSULTA 1: Bilhetes com valor pago > 10 ==========");
+      List<Bilhete> bilhetesCaros = Fachada.consultarBilhetesValorMaiorX(10.0);
+      System.out.println("Encontrados " + bilhetesCaros.size() + " bilhete(s):");
+      for (Bilhete b : bilhetesCaros) {
+        System.out.println("   " + b);
+      }
 
-      // veiculos estacionados na data x no estacionamento y
-      System.out.println("--------- veiculos estacionados na data x no estacionamento y");
-      System.out.println(Repositorio.lerVeiculoEstacionadoData(1, "13/10/2025"));
-      System.out.println();
+      System.out.println("\n========== CONSULTA 2: Veículos estacionados em uma data específica ==========");
+      Date hoje = new Date();
+      String dataFormatada = new SimpleDateFormat("dd/MM/yyyy").format(hoje);
+      System.out.println("Data da consulta: " + dataFormatada);
+      System.out.println("Estacionamento: Shopping Center");
+      
+      List<Veiculo> veiculosEstacionados = Fachada.consultarVeiculoEstacionadoDataX(hoje, "Shopping Center");
+      System.out.println("Encontrados " + veiculosEstacionados.size() + " veículo(s):");
+      for (Veiculo v : veiculosEstacionados) {
+        System.out.println("   " + v);
+      }
 
-      // veiculos com mais de n bilhetes
-      System.out.println("--------- veiculos com mais de n bilhetes");
-      System.out.println(Repositorio.lerVeiculoMaisBilhetes(1));
-      System.out.println();
+      System.out.println("\n========== CONSULTA 3: Veículos com mais de 1 bilhete ==========");
+      List<Veiculo> veiculosComMaisBilhetes = Fachada.consultarVeiculoMaisXBilhetes(1);
+      System.out.println("Encontrados " + veiculosComMaisBilhetes.size() + " veículo(s):");
+      for (Veiculo v : veiculosComMaisBilhetes) {
+        System.out.println("   " + v + " - " + v.getBilhetes().size() + " bilhete(s)");
+      }
+
+      System.out.println("\n========== CONSULTAS CONCLUÍDAS ==========");
+      
     } catch (Exception e) {
-      System.out.println("--->" + e.getMessage());
+      System.out.println("ERRO: " + e.getMessage());
+      e.printStackTrace();
     }
   }
 
