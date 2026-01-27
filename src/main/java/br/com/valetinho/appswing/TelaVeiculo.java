@@ -32,6 +32,7 @@ public class TelaVeiculo {
   private JTable table;
   private JScrollPane scrollPane;
   private JButton button;
+  private JButton botaoFoto;
   private JButton button_1;
   private JButton button_2;
   private JButton button_3;
@@ -45,7 +46,7 @@ public class TelaVeiculo {
   private JTextField textField_2;
   private JTextField textField_3;
 
-  private String placaSelecionada = null; 
+  private String placaSelecionada = null;
 
   public TelaVeiculo() {
     initialize();
@@ -83,11 +84,11 @@ public class TelaVeiculo {
           if (table.getSelectedRow() >= 0) {
             String placa = (String) table.getValueAt(table.getSelectedRow(), 0);
             Veiculo v = Fachada.localizarVeiculo(placa);
-            
-            placaSelecionada = placa; 
+
+            placaSelecionada = placa;
             textField_1.setText(placa);
             textField_2.setText("");
-            
+
             String bilhetes;
             int qtd = v.getBilhetes().size();
             if (qtd == 0) {
@@ -132,8 +133,24 @@ public class TelaVeiculo {
       }
     });
     button.setFont(new Font("Tahoma", Font.PLAIN, 12));
-    button.setBounds(220, 11, 109, 23);
+    button.setBounds(166, 11, 109, 23);
     frame.getContentPane().add(button);
+
+    botaoFoto = new JButton("Foto");
+    botaoFoto.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        try {
+          if (placaSelecionada == null)
+            throw new Exception("Veículo não selecionado, impossível ver foto!");
+          new TelaFotoVeiculo(placaSelecionada);
+        } catch (Exception err) {
+          label.setText(err.getMessage());
+        }
+      }
+    });
+    botaoFoto.setFont(new Font("Tahoma", Font.PLAIN, 12));
+    botaoFoto.setBounds(280, 11, 109, 23);
+    frame.getContentPane().add(botaoFoto);
 
     label_2 = new JLabel("selecione um veículo para editar");
     label_2.setBounds(31, 190, 394, 14);
@@ -191,6 +208,7 @@ public class TelaVeiculo {
             return;
           }
           String placa = textField_1.getText().trim();
+
           Fachada.criarVeiculo(placa);
           label.setText("veículo criado");
           listagem();

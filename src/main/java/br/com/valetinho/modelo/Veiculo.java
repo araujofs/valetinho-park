@@ -2,6 +2,7 @@ package br.com.valetinho.modelo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -24,14 +25,18 @@ public class Veiculo {
   @Column(unique = true)
   private String placa;
 
+  @Column(columnDefinition = "bytea")
+  private byte[] foto;
+
   @OneToMany(mappedBy = "veiculo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
   private List<Bilhete> bilhetes = new ArrayList<>();
 
   public Veiculo() {
   }
 
-  public Veiculo(String placa) {
+  public Veiculo(String placa, byte[] foto) {
     this.placa = placa;
+    this.foto = foto;
   }
 
   public void addBilhete(Bilhete bilhete) {
@@ -60,8 +65,25 @@ public class Veiculo {
     return bilhetes;
   }
 
+  public byte[] getFoto() {
+    return foto;
+  }
+
+  public void setFoto(byte[] foto) {
+    this.foto = foto;
+  }
+
   @Override
   public String toString() {
     return "[placa=" + placa + "]";
+  }
+
+  private static List<String> fotosCarros() {
+    return List.of("clio.png", "ka.png", "gol.png", "megane.png", "corvette.png");
+  }
+
+  public static String getFotoCarroURL() {
+    List<String> lista = Veiculo.fotosCarros();
+    return "/imagens/" + lista.get(ThreadLocalRandom.current().nextInt(lista.size()));
   }
 }

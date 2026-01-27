@@ -1,5 +1,6 @@
 package br.com.valetinho.requisito;
 
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -30,8 +31,6 @@ public class Fachada {
         throw new RuntimeException("Veículo com placa \"" + placa + "\" não existe!");
 
       return p;
-    } catch (Exception e) {
-      throw e;
     } finally {
       veiculoRep.desconectar();
     }
@@ -43,12 +42,15 @@ public class Fachada {
     try {
       veiculoRep.begin();
 
-      Veiculo veiculo = new Veiculo(placa);
+      InputStream is = Fachada.class.getResourceAsStream(Veiculo.getFotoCarroURL());
+      byte[] foto = is.readAllBytes();
+
+      Veiculo veiculo = new Veiculo(placa, foto);
       veiculoRep.criar(veiculo);
       veiculoRep.commit();
     } catch (Exception e) {
       veiculoRep.rollback();
-      throw e;
+      throw new RuntimeException(e);
     } finally {
       veiculoRep.desconectar();
     }
@@ -152,8 +154,7 @@ public class Fachada {
     }
   }
 
-  public static void alterarEstacionamento(Integer id, String nome, Localizacao localizacao)
-      {
+  public static void alterarEstacionamento(Integer id, String nome, Localizacao localizacao) {
     estacionamentoRep.conectar();
 
     try {
@@ -237,8 +238,7 @@ public class Fachada {
   }
 
   public static void criarBilhete(LocalDate data, LocalTime hora, Double valorPago, String placaVeiculo,
-      String nomeEstacionamento)
-      {
+      String nomeEstacionamento) {
     bilheteRep.conectar();
 
     try {
@@ -246,7 +246,8 @@ public class Fachada {
 
       Veiculo veiculo = veiculoRep.ler(placaVeiculo);
       if (veiculo == null) {
-        throw new RuntimeException("Erro na criação do bilhete -> Veiculo com placa \"" + placaVeiculo + "\" não existe!");
+        throw new RuntimeException(
+            "Erro na criação do bilhete -> Veiculo com placa \"" + placaVeiculo + "\" não existe!");
       }
 
       Estacionamento estacionamento = estacionamentoRep.ler(nomeEstacionamento);
