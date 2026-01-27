@@ -1,2 +1,5 @@
 *.class
 *.db4o
+
+examples
+target

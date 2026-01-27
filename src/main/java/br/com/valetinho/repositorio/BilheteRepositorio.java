@@ -1,0 +1,57 @@
+/**********************************
+ * IFPB - Curso Superior de Tec. em Sist. para Internet
+ * POO
+ * Prof. Fausto Maranh�o Ayres
+ **********************************/
+package br.com.valetinho.repositorio;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+
+import br.com.valetinho.modelo.Bilhete;
+import br.com.valetinho.modelo.Veiculo;
+import br.com.valetinho.util.Util;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
+
+public class BilheteRepositorio extends CRUDRepositorio<Bilhete> {
+
+  @Override
+  public Bilhete ler(Object chave) {
+    try {
+      TypedQuery<Bilhete> query = Util.getManager().createQuery("SELECT b FROM Bilhete b WHERE b.id = :chave",
+          Bilhete.class);
+      query.setParameter("chave", chave);
+      return query.getSingleResult();
+    } catch (NoResultException e) {
+      return null;
+    }
+  }
+
+  @Override
+  public List<Bilhete> listar() {
+    return Util.getManager().createQuery("SELECT b FROM Bilhete b", Bilhete.class).getResultList();
+  }
+
+  public List<Bilhete> lerBilhetePorVeiculoDataHora(Veiculo veiculo, LocalDate data, LocalTime hora) {
+    TypedQuery<Bilhete> query = Util.getManager().createQuery("SELECT b FROM Bilhete b WHERE b.veiculo = :veiculo AND b.data >= :data AND b.hora > :hora",
+        Bilhete.class);
+
+    query.setParameter("veiculo", veiculo);
+    query.setParameter("data", data);
+    query.setParameter("hora", hora);
+
+    return query.getResultList();
+  }
+
+  public List<Bilhete> lerBilheteMaiorValorPago(Double valorpago) {
+    TypedQuery<Bilhete> query = Util.getManager().createQuery("SELECT b FROM Bilhete b WHERE b.valorpago > :valorpago",
+        Bilhete.class);
+
+    query.setParameter("valorpago", valorpago);
+
+    return query.getResultList();
+  }
+
+}
